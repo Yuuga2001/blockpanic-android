@@ -35,7 +35,6 @@ fun StartScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(GameColors.sceneBg)
     ) {
         // Center content
         Column(
