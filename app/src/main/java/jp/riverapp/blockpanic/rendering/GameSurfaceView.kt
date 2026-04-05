@@ -103,13 +103,13 @@ class GameSurfaceView @JvmOverloads constructor(
     }
     private val hudPaint = Paint().apply {
         color = Color.WHITE
-        textSize = 18f * resources.displayMetrics.density
+        textSize = 16f * resources.displayMetrics.density
         typeface = Typeface.create(Typeface.MONOSPACE, Typeface.BOLD)
         isAntiAlias = true
     }
     private val hudSmallPaint = Paint().apply {
         color = Color.GRAY
-        textSize = 14f * resources.displayMetrics.density
+        textSize = 12.5f * resources.displayMetrics.density
         typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
         isAntiAlias = true
     }
@@ -735,7 +735,7 @@ class GameSurfaceView @JvmOverloads constructor(
     private fun drawHUD(canvas: Canvas, coord: GameCoordinator) {
         val density = resources.displayMetrics.density
         val padding = 24f * density  // extra right offset for rounded corners
-        val safeTop = 20f * density  // extra down offset for rounded corners
+        val safeTop = 26f * density  // extra down offset for rounded corners
 
         val selfPlayer = coord.players.find { it.id == coord.effectivePlayerId }
         if (coord.effectivePlayerId.isNotEmpty() && selfPlayer != null) {
