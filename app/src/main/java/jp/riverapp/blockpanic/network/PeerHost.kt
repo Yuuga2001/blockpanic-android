@@ -112,7 +112,10 @@ class PeerHost {
                 override fun onAddStream(stream: MediaStream?) {}
                 override fun onRemoveStream(stream: MediaStream?) {}
                 override fun onDataChannel(dc: DataChannel?) {
-                    dc?.let { mainHandler.post { setupChannel(peerId, it) } }
+                    // CRITICAL: Register observer immediately on WebRTC thread.
+                    // If we post to mainHandler, the web client's "join" message
+                    // may arrive before the observer is registered and be lost.
+                    dc?.let { setupChannel(peerId, it) }
                 }
                 override fun onRenegotiationNeeded() {}
                 override fun onAddTrack(receiver: RtpReceiver?, streams: Array<out MediaStream>?) {}
@@ -162,15 +165,21 @@ class PeerHost {
     }
 
     private fun setupChannel(peerId: String, channel: DataChannel) {
-        val peer = peers[peerId] ?: return
-        peers[peerId] = peer.copy(channel = channel)
+        // Called from WebRTC thread — register observer immediately to not miss messages
+        // Update peers map on main thread for thread safety
+        mainHandler.post {
+            val peer = peers[peerId] ?: return@post
+            peers[peerId] = peer.copy(channel = channel)
+        }
 
         channel.registerObserver(object : DataChannel.Observer {
             override fun onBufferedAmountChange(previousAmount: Long) {}
             override fun onStateChange() {
                 when (channel.state()) {
                     DataChannel.State.OPEN -> {
-                        peers[peerId]?.let { peers[peerId] = it.copy(connected = true) }
+                        mainHandler.post {
+                            peers[peerId]?.let { peers[peerId] = it.copy(connected = true) }
+                        }
                     }
                     DataChannel.State.CLOSED -> mainHandler.post { handlePeerDisconnect(peerId) }
                     else -> {}
