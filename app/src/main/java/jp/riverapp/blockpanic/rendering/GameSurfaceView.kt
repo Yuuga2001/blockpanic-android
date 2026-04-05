@@ -103,13 +103,13 @@ class GameSurfaceView @JvmOverloads constructor(
     }
     private val hudPaint = Paint().apply {
         color = Color.WHITE
-        textSize = 16f
+        textSize = 28f
         typeface = Typeface.create(Typeface.MONOSPACE, Typeface.BOLD)
         isAntiAlias = true
     }
     private val hudSmallPaint = Paint().apply {
         color = Color.GRAY
-        textSize = 12f
+        textSize = 22f
         typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
         isAntiAlias = true
     }
@@ -608,12 +608,12 @@ class GameSurfaceView @JvmOverloads constructor(
         if (coord.effectivePlayerId.isNotEmpty() && selfPlayer != null) {
             val time = coord.survivalTime
             canvas.drawText("${L("hud_time")}: ${time}s", padding, safeTop, hudPaint)
-            canvas.drawText("${L("hud_score")}: ${selfPlayer.score}", padding, safeTop + 23f, hudPaint)
-            canvas.drawText("${L("hud_players")}: ${coord.playerCount}", padding, safeTop + 43f, hudSmallPaint)
-            canvas.drawText("${L("hud_room")}: ${coord.roomElapsed}s", padding, safeTop + 60f, hudSmallPaint)
+            canvas.drawText("${L("hud_score")}: ${selfPlayer.score}", padding, safeTop + 36f, hudPaint)
+            canvas.drawText("${L("hud_players")}: ${coord.playerCount}", padding, safeTop + 66f, hudSmallPaint)
+            canvas.drawText("${L("hud_room")}: ${coord.roomElapsed}s", padding, safeTop + 90f, hudSmallPaint)
         } else {
             canvas.drawText("${L("hud_players")}: ${coord.playerCount}", padding, safeTop, hudSmallPaint)
-            canvas.drawText("${L("hud_room")}: ${coord.roomElapsed}s", padding, safeTop + 17f, hudSmallPaint)
+            canvas.drawText("${L("hud_room")}: ${coord.roomElapsed}s", padding, safeTop + 28f, hudSmallPaint)
         }
     }
 }

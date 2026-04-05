@@ -143,11 +143,9 @@ private fun IconButton(text: String, onClick: () -> Unit) {
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .size(56.dp)
-            .clip(RoundedCornerShape(14.dp))
-            .background(Color(0x14FFFFFF))
             .clickable { onClick() }
     ) {
-        Text(text = text, fontSize = 28.sp)
+        Text(text = text, fontSize = 28.sp, color = Color.White.copy(alpha = 0.6f))
     }
 }
 
