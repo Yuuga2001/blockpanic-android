@@ -146,6 +146,18 @@ class GameSurfaceView @JvmOverloads constructor(
     private val effectPopups = mutableListOf<EffectPopup>()
     private val prevEffectEndTimes = mutableMapOf<String, Double>()
 
+    // Item disappearance animations
+    private val knownCoinPositions = mutableMapOf<String, Pair<Float, Float>>()
+    private val knownMysteryPositions = mutableMapOf<String, Pair<Float, Float>>()
+    private val itemAnimatingIds = mutableSetOf<String>()
+
+    private data class ItemAnim(
+        val x: Float, val y: Float, val type: ItemAnimType,
+        val collected: Boolean, val startTime: Long
+    )
+    private enum class ItemAnimType { COIN, MYSTERY }
+    private val itemAnims = mutableListOf<ItemAnim>()
+
     init {
         holder.addCallback(this)
     }
@@ -227,19 +239,44 @@ class GameSurfaceView @JvmOverloads constructor(
             drawBlock(canvas, block)
         }
 
-        // Draw coins
+        // Draw coins + track disappearance
         val coins = coord.coins
+        val activeCoinIds = mutableSetOf<String>()
         for (coin in coins) {
-            if (!coin.active) continue
-            drawCoin(canvas, coin)
+            if (coin.active) {
+                activeCoinIds.add(coin.id)
+                knownCoinPositions[coin.id] = Pair(coin.x.toFloat(), coin.y.toFloat())
+                drawCoin(canvas, coin)
+            } else {
+                val pos = knownCoinPositions.remove(coin.id)
+                if (pos != null && coin.id !in itemAnimatingIds) {
+                    itemAnimatingIds.add(coin.id)
+                    itemAnims.add(ItemAnim(pos.first, pos.second,
+                        ItemAnimType.COIN, coin.collected, System.currentTimeMillis()))
+                }
+            }
         }
+        // Clean up coins no longer in state
+        knownCoinPositions.keys.removeAll { it !in activeCoinIds && coins.none { c -> c.id == it } }
 
-        // Draw mystery items
+        // Draw mystery items + track disappearance
         val mysteryItems = coord.mysteryItems
+        val activeMysteryIds = mutableSetOf<String>()
         for (item in mysteryItems) {
-            if (!item.active) continue
-            drawMysteryItem(canvas, item)
+            if (item.active) {
+                activeMysteryIds.add(item.id)
+                knownMysteryPositions[item.id] = Pair(item.x.toFloat(), item.y.toFloat())
+                drawMysteryItem(canvas, item)
+            } else {
+                val pos = knownMysteryPositions.remove(item.id)
+                if (pos != null && item.id !in itemAnimatingIds) {
+                    itemAnimatingIds.add(item.id)
+                    itemAnims.add(ItemAnim(pos.first, pos.second,
+                        ItemAnimType.MYSTERY, item.collected, System.currentTimeMillis()))
+                }
+            }
         }
+        knownMysteryPositions.keys.removeAll { it !in activeMysteryIds && mysteryItems.none { m -> m.id == it } }
 
         // Draw players
         val players = coord.players
@@ -258,6 +295,9 @@ class GameSurfaceView @JvmOverloads constructor(
         // Effect popups (mystery item acquired)
         processEffectPopups(players)
         drawEffectPopups(canvas)
+
+        // Item disappearance animations
+        drawItemAnims(canvas)
 
         canvas.restore()
 
@@ -598,6 +638,96 @@ class GameSurfaceView @JvmOverloads constructor(
             canvas.drawText(popup.text, popup.x, popup.y + yOffset, effectPopupPaint)
         }
         effectPopups.removeAll(toRemove)
+    }
+
+    // MARK: - Item disappearance animations
+
+    private fun drawItemAnims(canvas: Canvas) {
+        val now = System.currentTimeMillis()
+        val duration = 500L // 500ms
+        val toRemove = mutableListOf<ItemAnim>()
+        val paint = Paint().apply { isAntiAlias = true }
+
+        for (anim in itemAnims) {
+            val elapsed = now - anim.startTime
+            if (elapsed > duration) { toRemove.add(anim); continue }
+            val progress = elapsed.toFloat() / duration // 0→1
+
+            if (anim.collected) {
+                // Collect: particles burst + floating text
+                drawCollectEffect(canvas, anim, progress, paint)
+            } else {
+                // Expire/crushed: shrink + fade
+                drawExpireEffect(canvas, anim, progress, paint)
+            }
+        }
+        itemAnims.removeAll(toRemove)
+    }
+
+    private fun drawExpireEffect(canvas: Canvas, anim: ItemAnim, progress: Float, paint: Paint) {
+        val scale = 1f - progress
+        val alpha = ((1f - progress) * 255).toInt().coerceIn(0, 255)
+        if (scale <= 0 || alpha <= 0) return
+
+        val r = C.coinRadius.toFloat() * scale
+        paint.style = Paint.Style.FILL
+
+        if (anim.type == ItemAnimType.COIN) {
+            paint.color = Color.rgb(255, 215, 0)
+            paint.alpha = alpha
+            canvas.drawCircle(anim.x, anim.y, r, paint)
+        } else {
+            // Mystery: rainbow cycling while shrinking
+            val hue = ((System.currentTimeMillis() * 100L / 1000) % 360).toFloat()
+            val hsv = floatArrayOf(hue, 1f, 0.6f)
+            paint.color = Color.HSVToColor(alpha, hsv)
+            canvas.drawCircle(anim.x, anim.y, r, paint)
+        }
+    }
+
+    private fun drawCollectEffect(canvas: Canvas, anim: ItemAnim, progress: Float, paint: Paint) {
+        val alpha = ((1f - progress) * 255).toInt().coerceIn(0, 255)
+
+        if (anim.type == ItemAnimType.COIN) {
+            // Floating "+100" text
+            val textPaint = Paint().apply {
+                color = Color.rgb(255, 215, 0)
+                this.alpha = alpha
+                textSize = 14f
+                typeface = Typeface.create(Typeface.MONOSPACE, Typeface.BOLD)
+                textAlign = Paint.Align.CENTER
+                isAntiAlias = true
+            }
+            val yOffset = -progress * 25f
+            canvas.drawText("+${C.coinScore}", anim.x, anim.y + yOffset, textPaint)
+
+            // Particles
+            paint.style = Paint.Style.FILL
+            for (i in 0 until 6) {
+                val angle = (i.toDouble() / 6 * Math.PI * 2).toFloat()
+                val dist = 20f * progress
+                val px = anim.x + cos(angle) * dist
+                val py = anim.y + sin(angle) * dist
+                val pScale = 1f - progress
+                paint.color = Color.rgb(255, 215, 0)
+                paint.alpha = alpha
+                canvas.drawCircle(px, py, 2.5f * pScale, paint)
+            }
+        } else {
+            // Mystery: rainbow particles
+            paint.style = Paint.Style.FILL
+            for (i in 0 until 8) {
+                val angle = (i.toDouble() / 8 * Math.PI * 2).toFloat()
+                val dist = 25f * progress
+                val px = anim.x + cos(angle) * dist
+                val py = anim.y + sin(angle) * dist
+                val pScale = 1f - progress
+                val hue = (i.toFloat() / 8f * 360f)
+                val hsv = floatArrayOf(hue, 1f, 1f)
+                paint.color = Color.HSVToColor(alpha, hsv)
+                canvas.drawCircle(px, py, 3f * pScale, paint)
+            }
+        }
     }
 
     // MARK: - HUD rendering (screen space)
