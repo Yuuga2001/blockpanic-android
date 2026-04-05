@@ -12,6 +12,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.EmojiEvents
+import androidx.compose.material.icons.filled.HelpOutline
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -119,33 +124,33 @@ fun StartScreen(
             }
         }
 
-        // Right-side icon buttons
+        // Right-side icon buttons (flat design, Material Icons)
         Column(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .padding(end = 24.dp)
         ) {
-            IconButton(text = "🏆", onClick = onRecords)
-            Spacer(modifier = Modifier.height(12.dp))
-            IconButton(text = "❓", onClick = onHowToPlay)
-            Spacer(modifier = Modifier.height(12.dp))
-            IconButton(text = "⚙", onClick = onSettings)
-            Spacer(modifier = Modifier.height(12.dp))
-            IconButton(text = "🌐", onClick = onLanguage)
+            FlatIconButton(icon = Icons.Filled.EmojiEvents, onClick = onRecords)
+            Spacer(modifier = Modifier.height(16.dp))
+            FlatIconButton(icon = Icons.Filled.HelpOutline, onClick = onHowToPlay)
+            Spacer(modifier = Modifier.height(16.dp))
+            FlatIconButton(icon = Icons.Filled.Settings, onClick = onSettings)
+            Spacer(modifier = Modifier.height(16.dp))
+            FlatIconButton(icon = Icons.Filled.Language, onClick = onLanguage)
         }
     }
 }
 
 @Composable
-private fun IconButton(text: String, onClick: () -> Unit) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .size(56.dp)
-            .clickable { onClick() }
-    ) {
-        Text(text = text, fontSize = 28.sp, color = Color.White.copy(alpha = 0.6f))
+private fun FlatIconButton(icon: androidx.compose.ui.graphics.vector.ImageVector, onClick: () -> Unit) {
+    androidx.compose.material3.IconButton(onClick = onClick) {
+        androidx.compose.material3.Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = Color.White.copy(alpha = 0.5f),
+            modifier = Modifier.size(32.dp)
+        )
     }
 }
 
