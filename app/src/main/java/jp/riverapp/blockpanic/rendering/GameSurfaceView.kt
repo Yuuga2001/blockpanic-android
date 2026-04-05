@@ -305,7 +305,7 @@ class GameSurfaceView @JvmOverloads constructor(
         else if (player.type == PlayerType.CPU) Color.GRAY
         else Color.rgb(69, 135, 255) // blue for others
 
-        val headR = 6f  // 頭のサイズは固定（BIG/MINIで変わらない）
+        val headR = (6.0 * max(player.heightMultiplier, 0.5)).toFloat()
         val headY = topY + headR
         val neckY = headY + headR
         val shoulderY = neckY + 4
@@ -400,11 +400,11 @@ class GameSurfaceView @JvmOverloads constructor(
         // Head
         headPaint.color = color
         headPaint.style = Paint.Style.FILL
-        canvas.drawCircle(cx, headY, headR, headPaint)
+        canvas.drawCircle(cx, headY, headR * max(player.heightMultiplier.toFloat(), 0.5f), headPaint)
         headPaint.color = Color.BLACK
         headPaint.style = Paint.Style.STROKE
         headPaint.strokeWidth = 1f
-        canvas.drawCircle(cx, headY, headR, headPaint)
+        canvas.drawCircle(cx, headY, headR * max(player.heightMultiplier.toFloat(), 0.5f), headPaint)
 
         // Name label
         labelPaint.textSize = if (isSelf) 13f else 10f
@@ -458,7 +458,7 @@ class GameSurfaceView @JvmOverloads constructor(
                 val pH = (C.playerHeight * player.heightMultiplier).toFloat()
                 val cx = (player.x + C.playerWidth / 2).toFloat()
                 val footY = (player.y + pH).toFloat()
-                val headR = 6f
+                val headR = (6.0 * max(player.heightMultiplier, 0.5)).toFloat()
 
                 crushAnims.add(CrushAnim(cx, footY, color, pH, headR, System.currentTimeMillis()))
             }
