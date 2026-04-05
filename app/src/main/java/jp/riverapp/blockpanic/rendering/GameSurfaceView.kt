@@ -601,8 +601,9 @@ class GameSurfaceView @JvmOverloads constructor(
     // MARK: - HUD rendering (screen space)
 
     private fun drawHUD(canvas: Canvas, coord: GameCoordinator) {
-        val padding = 16f * resources.displayMetrics.density
-        val safeTop = padding + 8f // approximate status bar offset
+        val density = resources.displayMetrics.density
+        val padding = 24f * density  // extra right offset for rounded corners
+        val safeTop = 20f * density  // extra down offset for rounded corners
 
         val selfPlayer = coord.players.find { it.id == coord.effectivePlayerId }
         if (coord.effectivePlayerId.isNotEmpty() && selfPlayer != null) {
