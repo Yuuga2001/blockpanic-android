@@ -35,14 +35,19 @@ fun GameScreen(coordinator: GameCoordinator) {
             .background(GameColors.sceneBg)
     ) {
         // Background game rendering (always visible — shows bot play on start screen)
-        AndroidView(
-            factory = { ctx ->
-                GameSurfaceView(ctx).apply {
-                    this.coordinator = coordinator
-                }
-            },
-            modifier = Modifier.fillMaxSize()
-        )
+        key("gameSurface") {
+            AndroidView(
+                factory = { ctx ->
+                    GameSurfaceView(ctx).apply {
+                        this.coordinator = coordinator
+                    }
+                },
+                update = { view ->
+                    view.coordinator = coordinator
+                },
+                modifier = Modifier.fillMaxSize()
+            )
+        }
 
         when (screen) {
             GameScreenEnum.START -> {
