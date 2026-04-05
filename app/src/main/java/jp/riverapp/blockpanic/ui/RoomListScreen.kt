@@ -33,27 +33,30 @@ fun RoomListScreen(
     var loading by remember { mutableStateOf(true) }
     val signalingClient = remember { SignalingClient() }
 
-    // Auto-refresh rooms every 5s
     LaunchedEffect(Unit) {
         while (isActive) {
-            try {
-                rooms = signalingClient.listRooms()
-            } catch (_: Exception) {}
+            try { rooms = signalingClient.listRooms() } catch (_: Exception) {}
             loading = false
             delay(5000)
         }
     }
 
+    // Full screen tap-to-dismiss backdrop
     Box(
+        contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.6f))
+            .clickable(indication = null, interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }) { onBack() }
     ) {
+        // Compact centered panel (matching iOS: maxWidth 500, maxHeight 350)
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .widthIn(max = 500.dp)
+                .heightIn(max = 350.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color(0xCC1A1A2E))
+                .clickable(indication = null, interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }) { /* prevent dismiss */ }
+                .padding(20.dp)
         ) {
             // Header
             Row(
@@ -75,7 +78,6 @@ fun RoomListScreen(
                     fontWeight = FontWeight.Black
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                // CREATE button
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
@@ -84,36 +86,36 @@ fun RoomListScreen(
                         .clickable { onCreateRoom(playerName) }
                         .padding(horizontal = 16.dp, vertical = 8.dp)
                 ) {
-                    Text(
-                        text = L("create"),
-                        color = Color.White,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Text(L("create"), color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
-            // Room list
+            // Room list content
             if (loading) {
-                Text(
-                    text = L("loading_rooms"),
-                    color = GameColors.textSecondary,
-                    fontSize = 14.sp,
-                    modifier = Modifier.padding(top = 40.dp)
-                )
-            } else if (rooms.isEmpty()) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(top = 40.dp)
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxWidth().weight(1f)
                 ) {
-                    Text(text = L("no_rooms"), color = Color.White, fontSize = 16.sp)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = L("no_rooms_hint"), color = GameColors.textMuted, fontSize = 13.sp)
+                    Text(L("loading_rooms"), color = GameColors.textSecondary, fontSize = 14.sp)
+                }
+            } else if (rooms.isEmpty()) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxWidth().weight(1f)
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(L("no_rooms"), color = Color.White, fontSize = 16.sp)
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Text(L("no_rooms_hint"), color = GameColors.textMuted, fontSize = 13.sp)
+                    }
                 }
             } else {
-                LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier.weight(1f)
+                ) {
                     items(rooms) { room ->
                         val isFull = room.playerCount >= C.maxRoomPlayers
                         Row(
@@ -122,29 +124,20 @@ fun RoomListScreen(
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(8.dp))
                                 .background(Color(0x0DFFFFFF))
-                                .padding(horizontal = 16.dp, vertical = 12.dp)
+                                .padding(horizontal = 14.dp, vertical = 10.dp)
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(
-                                    text = room.hostName + L("room_suffix"),
-                                    color = Color.White,
-                                    fontSize = 15.sp,
-                                    fontWeight = FontWeight.Bold
+                                    room.hostName + L("room_suffix"),
+                                    color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.SemiBold
                                 )
                                 Text(
-                                    text = "${room.playerCount} ${L("players_suffix")}",
-                                    color = GameColors.textMuted,
-                                    fontSize = 12.sp
+                                    "${room.playerCount} / ${C.maxRoomPlayers} ${L("players_suffix")}",
+                                    color = GameColors.textMuted, fontSize = 11.sp
                                 )
                             }
-
                             if (isFull) {
-                                Text(
-                                    text = L("full"),
-                                    color = Color(0xFFFF6666),
-                                    fontSize = 13.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
+                                Text(L("full"), color = Color.Gray, fontSize = 13.sp, fontWeight = FontWeight.Bold)
                             } else {
                                 Box(
                                     contentAlignment = Alignment.Center,
@@ -154,12 +147,7 @@ fun RoomListScreen(
                                         .clickable { onJoinRoom(room.roomId, playerName, room.hostName) }
                                         .padding(horizontal = 16.dp, vertical = 6.dp)
                                 ) {
-                                    Text(
-                                        text = L("join"),
-                                        color = Color.White,
-                                        fontSize = 13.sp,
-                                        fontWeight = FontWeight.Bold
-                                    )
+                                    Text(L("join"), color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Bold)
                                 }
                             }
                         }
