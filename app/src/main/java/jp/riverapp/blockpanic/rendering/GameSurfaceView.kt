@@ -103,13 +103,13 @@ class GameSurfaceView @JvmOverloads constructor(
     }
     private val hudPaint = Paint().apply {
         color = Color.WHITE
-        textSize = 28f
+        textSize = 18f * resources.displayMetrics.density
         typeface = Typeface.create(Typeface.MONOSPACE, Typeface.BOLD)
         isAntiAlias = true
     }
     private val hudSmallPaint = Paint().apply {
         color = Color.GRAY
-        textSize = 22f
+        textSize = 14f * resources.displayMetrics.density
         typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
         isAntiAlias = true
     }
@@ -740,13 +740,15 @@ class GameSurfaceView @JvmOverloads constructor(
         val selfPlayer = coord.players.find { it.id == coord.effectivePlayerId }
         if (coord.effectivePlayerId.isNotEmpty() && selfPlayer != null) {
             val time = coord.survivalTime
+            val lineH = 24f * density
             canvas.drawText("${L("hud_time")}: ${time}s", padding, safeTop, hudPaint)
-            canvas.drawText("${L("hud_score")}: ${selfPlayer.score}", padding, safeTop + 36f, hudPaint)
-            canvas.drawText("${L("hud_players")}: ${coord.playerCount}", padding, safeTop + 66f, hudSmallPaint)
-            canvas.drawText("${L("hud_room")}: ${coord.roomElapsed}s", padding, safeTop + 90f, hudSmallPaint)
+            canvas.drawText("${L("hud_score")}: ${selfPlayer.score}", padding, safeTop + lineH, hudPaint)
+            canvas.drawText("${L("hud_players")}: ${coord.playerCount}", padding, safeTop + lineH * 2.2f, hudSmallPaint)
+            canvas.drawText("${L("hud_room")}: ${coord.roomElapsed}s", padding, safeTop + lineH * 3f, hudSmallPaint)
         } else {
+            val lineH = 20f * density
             canvas.drawText("${L("hud_players")}: ${coord.playerCount}", padding, safeTop, hudSmallPaint)
-            canvas.drawText("${L("hud_room")}: ${coord.roomElapsed}s", padding, safeTop + 28f, hudSmallPaint)
+            canvas.drawText("${L("hud_room")}: ${coord.roomElapsed}s", padding, safeTop + lineH, hudSmallPaint)
         }
     }
 }
