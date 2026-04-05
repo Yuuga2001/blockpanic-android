@@ -1,0 +1,111 @@
+package jp.riverapp.blockpanic.ui
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import jp.riverapp.blockpanic.i18n.L
+import jp.riverapp.blockpanic.model.GameMode
+
+@Composable
+fun GameOverOverlay(
+    survivalTime: Int,
+    finalScore: Int,
+    mode: GameMode,
+    onPlayAgain: () -> Unit,
+    onExitRoom: (() -> Unit)?
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xAA000000))
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color(0xCC1A1A2E))
+                .padding(32.dp)
+        ) {
+            Text(
+                text = L("game_over"),
+                color = Color.White,
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Black
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // TIME
+            Row(verticalAlignment = Alignment.Bottom) {
+                Text(
+                    text = "${L("time_label")}: ${survivalTime}s",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            // SCORE
+            Row(verticalAlignment = Alignment.Bottom) {
+                Text(
+                    text = "${L("score_label")}: ${finalScore}pt",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // PLAY AGAIN button
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .width(200.dp)
+                    .height(48.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(GameColors.playButton)
+                    .clickable { onPlayAgain() }
+            ) {
+                Text(
+                    text = L("play_again"),
+                    color = Color.White,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            // EXIT ROOM button (for online modes)
+            if (onExitRoom != null && mode != GameMode.LOCAL) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .width(200.dp)
+                        .height(48.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Color(0x33FFFFFF))
+                        .clickable { onExitRoom() }
+                ) {
+                    Text(
+                        text = L("exit_room"),
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+        }
+    }
+}
