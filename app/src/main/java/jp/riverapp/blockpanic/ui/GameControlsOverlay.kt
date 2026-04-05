@@ -116,7 +116,7 @@ fun GameControlsOverlay(coordinator: GameCoordinator) {
             modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .padding(end = 80.dp)
-                .size(buttonSize * 1.2f)
+                .size(buttonSize * 1.8f)
                 .scale(jumpScale)
                 .clip(CircleShape)
                 .background(
