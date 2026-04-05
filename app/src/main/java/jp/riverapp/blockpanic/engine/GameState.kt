@@ -71,19 +71,19 @@ class GameState {
     }
 
     fun getUserCount(): Int {
-        return players.values.count { it.type == PlayerType.USER }
+        return players.values.toList().count { it.type == PlayerType.USER }
     }
 
     fun getCPUCount(): Int {
-        return players.values.count { it.type == PlayerType.CPU }
+        return players.values.toList().count { it.type == PlayerType.CPU }
     }
 
     fun getAlivePlayers(): List<ServerPlayer> {
-        return players.values.filter { it.alive }
+        return players.values.toList().filter { it.alive }
     }
 
     fun getCPUPlayers(): List<ServerPlayer> {
-        return players.values.filter { it.type == PlayerType.CPU }
+        return players.values.toList().filter { it.type == PlayerType.CPU }
     }
 
     /** Ensure minimum 5 players by adding/removing CPUs */
@@ -132,7 +132,7 @@ class GameState {
         val staticBlocks = allBlocks // All blocks are collision targets
 
         // Process all alive players
-        for (player in players.values) {
+        for (player in players.values.toList()) {
             if (!player.alive) continue
 
             // Update score (survival time + coin bonus)
@@ -168,7 +168,7 @@ class GameState {
 
         // Respawn dead CPUs after a delay (so crush animation plays on clients)
         val now = System.currentTimeMillis().toDouble()
-        for ((_, player) in players) {
+        for ((_, player) in players.toList()) {
             if (player.type == PlayerType.CPU && !player.alive) {
                 if (player.diedAt == 0.0) {
                     player.diedAt = now
@@ -283,7 +283,7 @@ class GameState {
 
             // Player-coin collision (circle vs AABB, all players including CPU)
             var collected = false
-            for (player in players.values) {
+            for (player in players.values.toList()) {
                 if (!player.alive) continue
 
                 // Circle-AABB collision (use player's effective height)
@@ -407,7 +407,7 @@ class GameState {
 
             // Player collision
             var collected = false
-            for (player in players.values) {
+            for (player in players.values.toList()) {
                 if (!player.alive) continue
 
                 val pH = C.playerHeight * player.heightMultiplier
@@ -484,7 +484,7 @@ class GameState {
 
     private fun updateEffects() {
         val now = System.currentTimeMillis().toDouble()
-        for (player in players.values) {
+        for (player in players.values.toList()) {
             if (player.effectEndTime > 0 && now >= player.effectEndTime) {
                 setHeightMultiplier(player, 1.0)
                 player.jumpMultiplier = 1.0
@@ -513,12 +513,12 @@ class GameState {
     }
 
     fun getWorldState(): WorldState {
-        val playerStates = players.values.map { toPlayerState(it) }
+        val playerStates = players.values.toList().map { toPlayerState(it) }
         val blocks = tetris.getAllBlocks()
-        val coinStates = coins.values.map { c ->
+        val coinStates = coins.values.toList().map { c ->
             CoinState(id = c.id, x = c.x, y = c.y, active = c.active, collected = c.collected)
         }
-        val mysteryItemStates = mysteryItems.values.map { m ->
+        val mysteryItemStates = mysteryItems.values.toList().map { m ->
             MysteryItemState(id = m.id, x = m.x, y = m.y, active = m.active, collected = m.collected, effect = m.effect)
         }
         val roomElapsed = floor((System.currentTimeMillis().toDouble() - roomStartedAt) / 1000.0).toInt()

@@ -3,19 +3,14 @@ package jp.riverapp.blockpanic
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.UiSelector
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import jp.riverapp.blockpanic.i18n.L
 
-/**
- * Full gameplay flow UI tests.
- * Tests the complete user journey: Start → Play → Game → Die → Game Over → Retry.
- * Requires emulator or device.
- */
 @RunWith(AndroidJUnit4::class)
 class GameplayFlowUITest {
 
@@ -28,51 +23,44 @@ class GameplayFlowUITest {
         val intent = context.packageManager.getLaunchIntentForPackage("jp.riverapp.blockpanic")
         context.startActivity(intent!!)
         device.wait(Until.hasObject(By.pkg("jp.riverapp.blockpanic").depth(0)), 5000)
+        Thread.sleep(2000)
     }
 
     @Test
     fun testPlayButtonStartsGame() {
-        // Find and tap PLAY
-        val playButton = device.findObject(UiSelector().textContains("PLAY"))
-        assertTrue("PLAY button should exist", playButton.waitForExists(3000))
-        playButton.click()
-
-        // Game screen should show (wait for controls to appear)
+        val playText = L("play")
+        val found = device.wait(Until.hasObject(By.textContains(playText)), 5000)
+        assertTrue("'$playText' button should exist", found)
+        device.findObject(By.textContains(playText)).click()
         Thread.sleep(1000)
-        // In game state, the SurfaceView renders the game
-        // We verify by checking the app is still in foreground
         assertEquals("jp.riverapp.blockpanic", device.currentPackageName)
     }
 
     @Test
     fun testOnlineShowsRoomList() {
-        val onlineButton = device.findObject(UiSelector().textContains("ONLINE"))
-        assertTrue("ONLINE button should exist", onlineButton.waitForExists(3000))
-        onlineButton.click()
+        val onlineText = L("online")
+        val found = device.wait(Until.hasObject(By.textContains(onlineText)), 5000)
+        assertTrue("'$onlineText' button should exist", found)
+        device.findObject(By.textContains(onlineText)).click()
 
-        // Room list should show CREATE button
-        val createButton = device.findObject(UiSelector().textContains("CREATE"))
-        assertTrue("CREATE button should appear in room list", createButton.waitForExists(3000))
+        val createText = L("create")
+        val createFound = device.wait(Until.hasObject(By.textContains(createText)), 5000)
+        assertTrue("'$createText' button should appear in room list", createFound)
     }
 
     @Test
     fun testRoomListBackReturnsToStart() {
-        // Go to room list
-        val onlineButton = device.findObject(UiSelector().textContains("ONLINE"))
-        onlineButton.waitForExists(3000)
-        onlineButton.click()
+        val onlineText = L("online")
+        device.wait(Until.hasObject(By.textContains(onlineText)), 5000)
+        device.findObject(By.textContains(onlineText)).click()
 
-        // Wait for room list
-        val createButton = device.findObject(UiSelector().textContains("CREATE"))
-        createButton.waitForExists(3000)
+        val backText = L("back")
+        val backFound = device.wait(Until.hasObject(By.textContains(backText)), 5000)
+        assertTrue("'$backText' button should exist", backFound)
+        device.findObject(By.textContains(backText)).click()
 
-        // Press BACK
-        val backButton = device.findObject(UiSelector().textContains("BACK"))
-        assertTrue("BACK button should exist", backButton.waitForExists(2000))
-        backButton.click()
-
-        // Should return to start screen (PLAY visible again)
-        val playButton = device.findObject(UiSelector().textContains("PLAY"))
-        assertTrue("Should return to start screen", playButton.waitForExists(3000))
+        val playText = L("play")
+        val returnFound = device.wait(Until.hasObject(By.textContains(playText)), 5000)
+        assertTrue("Should return to start screen", returnFound)
     }
 }
