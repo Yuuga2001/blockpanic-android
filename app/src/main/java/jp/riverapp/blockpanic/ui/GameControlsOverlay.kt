@@ -37,12 +37,12 @@ fun GameControlsOverlay(coordinator: GameCoordinator) {
     val rightScale by animateFloatAsState(if (activeDirection == Direction.RIGHT) 0.88f else 1f, tween(80))
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Direction pad (left side)
+        // Direction pad (left side, vertically centered)
         Row(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(start = 16.dp, bottom = 32.dp)
+                .align(Alignment.CenterStart)
+                .padding(start = 16.dp)
                 .pointerInput(Unit) {
                     val totalWidthPx = (buttonSize * 2 + 12.dp).toPx()
                     val midX = totalWidthPx / 2
@@ -110,12 +110,12 @@ fun GameControlsOverlay(coordinator: GameCoordinator) {
             }
         }
 
-        // Jump button (right side)
+        // Jump button (right side, vertically centered)
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 16.dp, bottom = 32.dp)
+                .align(Alignment.CenterEnd)
+                .padding(end = 16.dp)
                 .size(buttonSize * 1.2f)
                 .scale(jumpScale)
                 .clip(CircleShape)
