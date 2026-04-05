@@ -66,6 +66,59 @@ fun GameScreen(coordinator: GameCoordinator) {
             GameScreenEnum.GAME -> {
                 // Controls overlay
                 GameControlsOverlay(coordinator)
+
+                // Top bar: room name (center) + RETRY button (right)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 8.dp)
+                ) {
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    // Room name (online modes)
+                    if ((coordinator.mode == GameMode.P2P_HOST || coordinator.mode == GameMode.P2P_CLIENT)
+                        && coordinator.roomName.isNotEmpty()) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(Color(0xCC0F3460))
+                                .padding(horizontal = 14.dp, vertical = 6.dp)
+                        ) {
+                            Box(modifier = Modifier
+                                .size(8.dp)
+                                .clip(RoundedCornerShape(4.dp))
+                                .background(Color.Green))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = "${coordinator.roomName}${L("room_suffix")}",
+                                color = Color.White.copy(alpha = 0.85f),
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    // RETRY button
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(Color.White.copy(alpha = 0.08f))
+                            .clickable { coordinator.giveUp() }
+                            .padding(horizontal = 16.dp, vertical = 6.dp)
+                    ) {
+                        Text(
+                            text = L("retry"),
+                            color = Color.White.copy(alpha = 0.4f),
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
             }
 
             GameScreenEnum.GAME_OVER -> {
