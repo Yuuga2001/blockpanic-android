@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun GameControlsOverlay(coordinator: GameCoordinator) {
     val buttonSize = 60.dp
-    val buttonOpacity = 0.15f
+    val buttonOpacity = 0.10f
     val scope = rememberCoroutineScope()
 
     var activeDirection by remember { mutableStateOf<Direction?>(null) }
@@ -37,12 +37,12 @@ fun GameControlsOverlay(coordinator: GameCoordinator) {
     val rightScale by animateFloatAsState(if (activeDirection == Direction.RIGHT) 0.88f else 1f, tween(80))
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Direction pad (left side, vertically centered)
+        // Direction pad (left side, vertically centered, pushed inward)
         Row(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier
                 .align(Alignment.CenterStart)
-                .padding(start = 16.dp)
+                .padding(start = 80.dp)
                 .pointerInput(Unit) {
                     val totalWidthPx = (buttonSize * 2 + 12.dp).toPx()
                     val midX = totalWidthPx / 2
@@ -87,10 +87,10 @@ fun GameControlsOverlay(coordinator: GameCoordinator) {
                     .scale(leftScale)
                     .clip(CircleShape)
                     .background(
-                        Color.White.copy(alpha = if (activeDirection == Direction.LEFT) 0.35f else buttonOpacity)
+                        Color.White.copy(alpha = if (activeDirection == Direction.LEFT) 0.25f else buttonOpacity)
                     )
             ) {
-                Text("◀", color = Color.White.copy(alpha = if (activeDirection == Direction.LEFT) 0.9f else 0.5f),
+                Text("◀", color = Color.White.copy(alpha = if (activeDirection == Direction.LEFT) 0.7f else 0.3f),
                     fontSize = 28.sp, fontWeight = FontWeight.Bold)
             }
 
@@ -102,25 +102,25 @@ fun GameControlsOverlay(coordinator: GameCoordinator) {
                     .scale(rightScale)
                     .clip(CircleShape)
                     .background(
-                        Color.White.copy(alpha = if (activeDirection == Direction.RIGHT) 0.35f else buttonOpacity)
+                        Color.White.copy(alpha = if (activeDirection == Direction.RIGHT) 0.25f else buttonOpacity)
                     )
             ) {
-                Text("▶", color = Color.White.copy(alpha = if (activeDirection == Direction.RIGHT) 0.9f else 0.5f),
+                Text("▶", color = Color.White.copy(alpha = if (activeDirection == Direction.RIGHT) 0.7f else 0.3f),
                     fontSize = 28.sp, fontWeight = FontWeight.Bold)
             }
         }
 
-        // Jump button (right side, vertically centered)
+        // Jump button (right side, vertically centered, pushed inward)
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .align(Alignment.CenterEnd)
-                .padding(end = 16.dp)
+                .padding(end = 80.dp)
                 .size(buttonSize * 1.2f)
                 .scale(jumpScale)
                 .clip(CircleShape)
                 .background(
-                    GameColors.playButton.copy(alpha = if (jumpPressed) 0.4f else buttonOpacity)
+                    GameColors.playButton.copy(alpha = if (jumpPressed) 0.25f else buttonOpacity)
                 )
                 .pointerInput(Unit) {
                     awaitEachGesture {
@@ -146,7 +146,7 @@ fun GameControlsOverlay(coordinator: GameCoordinator) {
                     }
                 }
         ) {
-            Text("▲", color = Color.White.copy(alpha = if (jumpPressed) 0.9f else 0.5f),
+            Text("▲", color = Color.White.copy(alpha = if (jumpPressed) 0.7f else 0.3f),
                 fontSize = 32.sp, fontWeight = FontWeight.Bold)
         }
     }
