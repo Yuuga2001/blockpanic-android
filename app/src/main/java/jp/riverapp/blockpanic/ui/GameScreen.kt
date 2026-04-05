@@ -34,6 +34,16 @@ fun GameScreen(coordinator: GameCoordinator) {
             .fillMaxSize()
             .background(GameColors.sceneBg)
     ) {
+        // Background game rendering (always visible — shows bot play on start screen)
+        AndroidView(
+            factory = { ctx ->
+                GameSurfaceView(ctx).apply {
+                    this.coordinator = coordinator
+                }
+            },
+            modifier = Modifier.fillMaxSize()
+        )
+
         when (screen) {
             GameScreenEnum.START -> {
                 StartScreen(
@@ -49,30 +59,11 @@ fun GameScreen(coordinator: GameCoordinator) {
             }
 
             GameScreenEnum.GAME -> {
-                // Game SurfaceView
-                AndroidView(
-                    factory = { ctx ->
-                        GameSurfaceView(ctx).apply {
-                            this.coordinator = coordinator
-                        }
-                    },
-                    modifier = Modifier.fillMaxSize()
-                )
-
                 // Controls overlay
                 GameControlsOverlay(coordinator)
             }
 
             GameScreenEnum.GAME_OVER -> {
-                // Keep game rendering behind
-                AndroidView(
-                    factory = { ctx ->
-                        GameSurfaceView(ctx).apply {
-                            this.coordinator = coordinator
-                        }
-                    },
-                    modifier = Modifier.fillMaxSize()
-                )
 
                 GameOverOverlay(
                     survivalTime = coordinator.survivalTime,

@@ -326,39 +326,41 @@ class GameSurfaceView @JvmOverloads constructor(
         val onGround = player.onGround
 
         if (!onGround && vy < -2) {
-            // JUMP
-            elbowLx = cx - 7; elbowLy = shoulderY + 1; handLx = cx - 4; handLy = shoulderY + 5
-            elbowRx = cx + 7; elbowRy = shoulderY + 1; handRx = cx + 4; handRy = shoulderY + 5
-            kneeLx = cx - 6; kneeLy = midLegY + 3; footLx = cx - 8; footLy = midLegY - 4
-            kneeRx = cx + 6; kneeRy = midLegY + 3; footRx = cx + 8; footRy = midLegY - 4
+            // JUMP: arms raised with bent elbows, knees tucked up
+            // iOS: shoulderY+1 = below shoulder (SpriteKit Y up, -offset=down)
+            // Android: shoulderY-1 = above shoulder (Canvas Y down, -offset=up)
+            elbowLx = cx - 7; elbowLy = shoulderY - 1; handLx = cx - 4; handLy = shoulderY - 5
+            elbowRx = cx + 7; elbowRy = shoulderY - 1; handRx = cx + 4; handRy = shoulderY - 5
+            kneeLx = cx - 6; kneeLy = midLegY - 3; footLx = cx - 8; footLy = midLegY + 4
+            kneeRx = cx + 6; kneeRy = midLegY - 3; footRx = cx + 8; footRy = midLegY + 4
         } else if (!onGround) {
-            // FALL
-            elbowLx = cx - 8; elbowLy = shoulderY; handLx = cx - 10; handLy = shoulderY - 4
-            elbowRx = cx + 8; elbowRy = shoulderY; handRx = cx + 10; handRy = shoulderY - 4
-            kneeLx = cx - 4; kneeLy = midLegY - 2; footLx = cx - 6; footLy = legEndY
-            kneeRx = cx + 4; kneeRy = midLegY - 2; footRx = cx + 6; footRy = legEndY
+            // FALL: arms spread wide, legs dangling
+            elbowLx = cx - 8; elbowLy = shoulderY; handLx = cx - 10; handLy = shoulderY + 4
+            elbowRx = cx + 8; elbowRy = shoulderY; handRx = cx + 10; handRy = shoulderY + 4
+            kneeLx = cx - 4; kneeLy = midLegY + 2; footLx = cx - 6; footLy = legEndY
+            kneeRx = cx + 4; kneeRy = midLegY + 2; footRx = cx + 6; footRy = legEndY
         } else if (moveIntent != 0f) {
-            // RUN
+            // RUN: arms pumping, legs with knee lift
             val t = (System.nanoTime() / 1_000_000_000.0 / 0.12).toFloat()
             val s = sin(t)
             val armLen = 5f
             val legLen = 8f
 
-            elbowLx = cx - 3; elbowLy = shoulderY - 3 + s * 3
-            handLx = cx - s * armLen; handLy = shoulderY - 2 + s * 2
-            elbowRx = cx + 3; elbowRy = shoulderY - 3 - s * 3
-            handRx = cx + s * armLen; handRy = shoulderY - 2 - s * 2
+            elbowLx = cx - 3; elbowLy = shoulderY + 3 - s * 3
+            handLx = cx - s * armLen; handLy = shoulderY + 2 - s * 2
+            elbowRx = cx + 3; elbowRy = shoulderY + 3 + s * 3
+            handRx = cx + s * armLen; handRy = shoulderY + 2 + s * 2
 
             val kneeLift = max(s, 0f) * 6
             val kneeBack = max(-s, 0f) * 6
-            kneeLx = cx - s * 4; kneeLy = midLegY + kneeLift
+            kneeLx = cx - s * 4; kneeLy = midLegY - kneeLift
             footLx = cx - s * legLen; footLy = legEndY
-            kneeRx = cx + s * 4; kneeRy = midLegY + kneeBack
+            kneeRx = cx + s * 4; kneeRy = midLegY - kneeBack
             footRx = cx + s * legLen; footRy = legEndY
         } else {
-            // IDLE
-            elbowLx = cx - 4; elbowLy = midArmY; handLx = cx - 7; handLy = midArmY - 5
-            elbowRx = cx + 4; elbowRy = midArmY; handRx = cx + 7; handRy = midArmY - 5
+            // IDLE: straight arms down, legs apart
+            elbowLx = cx - 4; elbowLy = midArmY; handLx = cx - 7; handLy = midArmY + 5
+            elbowRx = cx + 4; elbowRy = midArmY; handRx = cx + 7; handRy = midArmY + 5
             kneeLx = cx - 4; kneeLy = midLegY; footLx = cx - 8; footLy = legEndY
             kneeRx = cx + 4; kneeRy = midLegY; footRx = cx + 8; footRy = legEndY
         }

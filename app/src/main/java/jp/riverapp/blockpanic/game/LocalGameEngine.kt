@@ -8,6 +8,9 @@ import kotlin.random.Random
 /**
  * Local game engine with 60fps game loop on a dedicated HandlerThread.
  * Port from iOS LocalGameEngine.swift
+ *
+ * CRITICAL: All input writes must be posted to the game thread to avoid race conditions.
+ * The game loop (tick) runs on HandlerThread, UI input comes from main thread.
  */
 class LocalGameEngine {
     var gameState: GameState = GameState()
@@ -19,7 +22,7 @@ class LocalGameEngine {
     private var broadcastAccum: Double = 0.0
     private var running = false
 
-    // Callbacks
+    // Callbacks (invoked on game thread, post to main if needed)
     var onState: ((List<PlayerState>, List<BlockState>, List<CoinState>, List<MysteryItemState>, Int) -> Unit)? = null
     var onStateMessage: ((StateMessage) -> Unit)? = null
     var onGameOver: ((Int) -> Unit)? = null
@@ -79,9 +82,15 @@ class LocalGameEngine {
         return id
     }
 
+    /**
+     * Apply local player input. Posts to game thread for thread safety.
+     * CRITICAL: Must not write player.input directly from main thread.
+     */
     fun applyInput(left: Boolean, right: Boolean, jump: Boolean) {
-        val player = gameState.getPlayer(playerId) ?: return
-        player.input = InputState(left, right, jump)
+        handler?.post {
+            val player = gameState.getPlayer(playerId) ?: return@post
+            player.input = InputState(left, right, jump)
+        }
     }
 
     // MARK: - Remote player management (host mode)
@@ -98,10 +107,15 @@ class LocalGameEngine {
         gameState.removePlayer(pid)
     }
 
+    /**
+     * Apply remote player input. Posts to game thread for thread safety.
+     */
     fun applyRemoteInput(peerId: String, left: Boolean, right: Boolean, jump: Boolean) {
-        val pid = peerPlayerMap[peerId] ?: return
-        val player = gameState.getPlayer(pid) ?: return
-        player.input = InputState(left, right, jump)
+        handler?.post {
+            val pid = peerPlayerMap[peerId] ?: return@post
+            val player = gameState.getPlayer(pid) ?: return@post
+            player.input = InputState(left, right, jump)
+        }
     }
 
     fun playerIdForPeer(peerId: String): String? = peerPlayerMap[peerId]
