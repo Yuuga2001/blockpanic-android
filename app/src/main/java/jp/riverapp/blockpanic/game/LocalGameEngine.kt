@@ -75,6 +75,13 @@ class LocalGameEngine {
 
     fun join(name: String): String {
         playerName = name
+        // 古い自分の死体を削除（rejoin時に死んだプレイヤーが残ってuserCountが増え続ける問題を防止）
+        if (lastSelfId.isNotEmpty()) {
+            val old = gameState.getPlayer(lastSelfId)
+            if (old != null && !old.alive) {
+                gameState.removePlayer(lastSelfId)
+            }
+        }
         val id = "p-${System.currentTimeMillis()}-${Random.nextInt(0, 0xFFFF).toString(36)}"
         val player = gameState.addPlayer(id, name)
         playerId = player.id
