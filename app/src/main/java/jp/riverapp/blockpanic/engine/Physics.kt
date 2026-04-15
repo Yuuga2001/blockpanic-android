@@ -69,8 +69,8 @@ fun resolvePlayerBlockCollisions(player: ServerPlayer, blocks: List<BlockState>)
             hadCollision = true
 
             if (overlap.overlapY <= overlap.overlapX) {
-                if (overlap.pushY == -1.0) {
-                    // Landing on top of block
+                if (overlap.pushY == -1.0 && player.vy >= 0) {
+                    // Landing on top of block (only when falling, not jumping upward)
                     player.y = block.y - pH
                     player.vy = 0.0
                     player.onGround = true
@@ -109,14 +109,16 @@ fun resolvePlayerBlockCollisions(player: ServerPlayer, blocks: List<BlockState>)
         if (!hadCollision) break
     }
 
-    // Crush check: only LANDED blocks can crush the player.
-    val finalAABB = playerAABB(x = player.x, y = player.y, width = C.playerWidth, height = pH)
-    for (block in blocks) {
-        if (block.falling) continue
-        val bAABB = AABB(x = block.x, y = block.y, width = block.width, height = block.height)
-        val overlap = getOverlap(finalAABB, bAABB)
-        if (overlap != null && overlap.overlapX > 2 && overlap.overlapY > 2) {
-            return true // CRUSHED between landed blocks
+    // Crush check: feet grounded + still overlapping with a landed block above = crushed.
+    if (player.onGround) {
+        val finalAABB = playerAABB(x = player.x, y = player.y, width = C.playerWidth, height = pH)
+        for (block in blocks) {
+            if (block.falling) continue
+            val bAABB = AABB(x = block.x, y = block.y, width = block.width, height = block.height)
+            val overlap = getOverlap(finalAABB, bAABB)
+            if (overlap != null && overlap.overlapX > 2 && overlap.overlapY > 2) {
+                return true
+            }
         }
     }
 

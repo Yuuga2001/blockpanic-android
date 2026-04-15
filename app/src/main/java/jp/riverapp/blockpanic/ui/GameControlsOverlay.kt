@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun GameControlsOverlay(coordinator: GameCoordinator) {
-    val buttonSize = 60.dp
+    val buttonSize = 74.dp
     val buttonOpacity = 0.10f
     val scope = rememberCoroutineScope()
 
@@ -37,12 +37,12 @@ fun GameControlsOverlay(coordinator: GameCoordinator) {
     val rightScale by animateFloatAsState(if (activeDirection == Direction.RIGHT) 0.88f else 1f, tween(80))
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Direction pad (left side, vertically centered, pushed inward)
+        // Direction pad (left side, bottom area)
         Row(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier
-                .align(Alignment.CenterStart)
-                .padding(start = 80.dp)
+                .align(Alignment.BottomStart)
+                .padding(start = 80.dp, bottom = 80.dp)
                 .pointerInput(Unit) {
                     val totalWidthPx = (buttonSize * 2 + 12.dp).toPx()
                     val midX = totalWidthPx / 2
@@ -110,12 +110,12 @@ fun GameControlsOverlay(coordinator: GameCoordinator) {
             }
         }
 
-        // Jump button (right side, vertically centered, pushed inward)
+        // Jump button (right side, bottom area)
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .padding(end = 80.dp)
+                .align(Alignment.BottomEnd)
+                .padding(end = 80.dp, bottom = 80.dp)
                 .size(buttonSize * 1.8f)
                 .scale(jumpScale)
                 .clip(CircleShape)
