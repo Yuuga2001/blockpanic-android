@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.HelpOutline
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -133,7 +134,7 @@ fun StartScreen(
                 .align(Alignment.CenterEnd)
                 .padding(end = 24.dp)
         ) {
-            FlatIconButton(icon = Icons.Filled.MenuBook, onClick = onRecords)
+            FlatIconButton(icon = Icons.Filled.Person, onClick = onRecords)
             Spacer(modifier = Modifier.height(16.dp))
             FlatIconButton(icon = Icons.Filled.EmojiEvents, onClick = onLeaderboard)
             Spacer(modifier = Modifier.height(16.dp))
