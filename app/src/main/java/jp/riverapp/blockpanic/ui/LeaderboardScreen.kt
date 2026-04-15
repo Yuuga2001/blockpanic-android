@@ -130,7 +130,7 @@ fun LeaderboardScreen(onBack: () -> Unit) {
                                             Text(text = L("you"), color = Color(0xFFE94560), fontSize = 9.sp, fontWeight = FontWeight.Bold)
                                         }
                                     }
-                                    Text(text = "${record.score}", color = Color(0xCCFFFFFF), fontSize = 11.sp, modifier = Modifier.width(56.dp))
+                                    Text(text = "${record.score}", color = Color(0xCCFFFFFF), fontSize = 11.sp, fontWeight = FontWeight.Bold, modifier = Modifier.width(56.dp))
                                     Text(text = "${record.survivalTime}s", color = Color(0xCCFFFFFF), fontSize = 11.sp, modifier = Modifier.width(48.dp))
                                     Text(text = record.mode, color = Color(0xCCFFFFFF), fontSize = 11.sp, modifier = Modifier.width(72.dp))
                                     Text(text = record.platform, color = Color(0xCCFFFFFF), fontSize = 11.sp, modifier = Modifier.width(56.dp))

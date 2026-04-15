@@ -133,9 +133,9 @@ fun StartScreen(
                 .align(Alignment.CenterEnd)
                 .padding(end = 24.dp)
         ) {
-            FlatIconButton(icon = Icons.Filled.EmojiEvents, onClick = onRecords)
+            FlatIconButton(icon = Icons.Filled.MenuBook, onClick = onRecords)
             Spacer(modifier = Modifier.height(16.dp))
-            FlatIconButton(icon = Icons.Filled.Public, onClick = onLeaderboard)
+            FlatIconButton(icon = Icons.Filled.EmojiEvents, onClick = onLeaderboard)
             Spacer(modifier = Modifier.height(16.dp))
             FlatIconButton(icon = Icons.Filled.HelpOutline, onClick = onHowToPlay)
             Spacer(modifier = Modifier.height(16.dp))
