@@ -419,14 +419,19 @@ class GameCoordinator {
         )
         GameRecordStore.save(record)
 
-        // Submit to world leaderboard
+        // Submit to world leaderboard (mode is always English)
+        val leaderboardMode = when (mode) {
+            GameMode.LOCAL -> "Single"
+            GameMode.P2P_HOST -> "Online(Host)"
+            GameMode.P2P_CLIENT -> "Online(Member)"
+        }
         scope.launch {
             try {
                 SignalingClient().submitScore(
                     score = record.score,
                     survivalTime = record.survivalTime,
                     playerName = record.playerName,
-                    mode = record.mode,
+                    mode = leaderboardMode,
                     platform = "android",
                     deviceId = GameRecordStore.deviceId
                 )
