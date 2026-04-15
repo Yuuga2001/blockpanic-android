@@ -20,7 +20,8 @@ data class RoomInfo(
     val roomId: String,
     val hostName: String,
     val playerCount: Int,
-    val createdAt: Double
+    val createdAt: Double,
+    val lastHeartbeat: Double = 0.0
 )
 
 data class SignalInfo(

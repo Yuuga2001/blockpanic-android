@@ -9,6 +9,7 @@ import jp.riverapp.blockpanic.model.GameRecord
 import jp.riverapp.blockpanic.model.GameRecordStore
 import jp.riverapp.blockpanic.network.PeerClient
 import jp.riverapp.blockpanic.network.PeerHost
+import jp.riverapp.blockpanic.network.SignalingClient
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -58,6 +59,8 @@ class GameCoordinator {
     private var lastStateTime: Long = 0
     private var hostTimeoutJob: Job? = null
     private var sessionId: Int = 0
+    /// バックグラウンド遷移時の遅延クリーンアップ用
+    private var backgroundCleanupJob: Job? = null
 
     val effectivePlayerId: String
         get() = if (mode == GameMode.P2P_CLIENT) clientPlayerId else engine.playerId
@@ -250,6 +253,16 @@ class GameCoordinator {
         currentScreen = GameScreen.CONNECTING
         scope.launch {
             try {
+                // ホスト生存確認（ゴーストルーム防止）
+                val freshRooms = SignalingClient().listRooms()
+                val now = System.currentTimeMillis() / 1000.0
+                val target = freshRooms.firstOrNull { it.roomId == roomId }
+                if (target == null || (now - target.lastHeartbeat) >= 45) {
+                    connectionError = L("room_expired")
+                    currentScreen = GameScreen.START
+                    return@launch
+                }
+
                 client.connect(roomId)
                 client.sendJoin(n)
             } catch (e: Exception) {
@@ -404,6 +417,33 @@ class GameCoordinator {
             playerName = name
         )
         GameRecordStore.save(record)
+    }
+
+    /** ホストモード時にルームを即座に破棄（runBlockingで確実に完了） */
+    fun cleanupHostRoom() {
+        val host = peerHost ?: return
+        if (host.roomId.isEmpty()) return
+        peerHost = null
+        backgroundCleanupJob?.cancel()
+        backgroundCleanupJob = null
+        runBlocking {
+            try { host.destroy() } catch (_: Exception) {}
+        }
+    }
+
+    /** バックグラウンド遷移時に5秒猶予付きでルーム削除をスケジュール */
+    fun scheduleBackgroundCleanup() {
+        if (peerHost == null || mode != GameMode.P2P_HOST) return
+        backgroundCleanupJob = scope.launch {
+            delay(5000)
+            cleanupHostRoom()
+        }
+    }
+
+    /** フォアグラウンド復帰時にスケジュールされた削除をキャンセル */
+    fun cancelBackgroundCleanup() {
+        backgroundCleanupJob?.cancel()
+        backgroundCleanupJob = null
     }
 
     fun destroy() {

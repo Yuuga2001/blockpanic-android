@@ -39,6 +39,18 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        // フォアグラウンド復帰時にスケジュールされた削除をキャンセル
+        coordinator.cancelBackgroundCleanup()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // バックグラウンド遷移時 → 5秒後にルーム削除（復帰時はキャンセル）
+        coordinator.scheduleBackgroundCleanup()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         coordinator.destroy()

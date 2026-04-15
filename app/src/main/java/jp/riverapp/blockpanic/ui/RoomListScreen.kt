@@ -35,7 +35,11 @@ fun RoomListScreen(
 
     LaunchedEffect(Unit) {
         while (isActive) {
-            try { rooms = signalingClient.listRooms() } catch (_: Exception) {}
+            try {
+                val fetched = signalingClient.listRooms()
+                val now = System.currentTimeMillis() / 1000.0
+                rooms = fetched.filter { (now - it.lastHeartbeat) < 45 }
+            } catch (_: Exception) {}
             loading = false
             delay(5000)
         }
