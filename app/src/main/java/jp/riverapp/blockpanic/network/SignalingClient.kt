@@ -30,6 +30,17 @@ data class SignalInfo(
     val answer: String?
 )
 
+data class LeaderboardRecord(
+    val rank: Int,
+    val playerName: String,
+    val score: Int,
+    val survivalTime: Int,
+    val mode: String,
+    val platform: String,
+    val createdAt: Double,
+    val isYou: Boolean = false
+)
+
 class SignalingError(val code: Int, message: String) : Exception("API error ($code): $message")
 
 class SignalingClient {
@@ -82,6 +93,24 @@ class SignalingClient {
         return wrapper.signal
     }
 
+    // MARK: - Leaderboard
+
+    suspend fun getLeaderboard(deviceId: String): List<LeaderboardRecord> {
+        val encoded = java.net.URLEncoder.encode(deviceId, "UTF-8")
+        val data = get("$baseURL/leaderboard?deviceId=$encoded")
+        val wrapper = gson.fromJson(data, LeaderboardResponse::class.java)
+        return wrapper.records
+    }
+
+    suspend fun submitScore(score: Int, survivalTime: Int, playerName: String, mode: String, platform: String, deviceId: String) {
+        val body = gson.toJson(mapOf(
+            "score" to score, "survivalTime" to survivalTime,
+            "playerName" to playerName, "mode" to mode,
+            "platform" to platform, "deviceId" to deviceId
+        ))
+        post("$baseURL/leaderboard", body)
+    }
+
     // MARK: - HTTP helpers
 
     private suspend fun get(url: String): String = withContext(Dispatchers.IO) {
@@ -132,4 +161,5 @@ class SignalingClient {
     private data class CreateRoomResponse(val roomId: String)
     private data class SignalsResponse(val signals: List<SignalInfo>)
     private data class SignalResponse(val signal: SignalInfo?)
+    private data class LeaderboardResponse(val records: List<LeaderboardRecord>)
 }

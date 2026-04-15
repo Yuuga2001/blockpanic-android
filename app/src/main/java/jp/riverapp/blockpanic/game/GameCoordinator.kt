@@ -22,7 +22,7 @@ import kotlin.random.Random
  */
 enum class GameScreen {
     START, ROOM_LIST, CONNECTING, GAME, GAME_OVER, HOST_DISCONNECTED,
-    RECORDS, HOW_TO_PLAY, SETTINGS, LANGUAGE_SELECT
+    RECORDS, HOW_TO_PLAY, SETTINGS, LANGUAGE_SELECT, LEADERBOARD
 }
 
 class GameCoordinator {
@@ -400,6 +400,7 @@ class GameCoordinator {
 
     fun showRoomList() { currentScreen = GameScreen.ROOM_LIST }
     fun showRecords() { currentScreen = GameScreen.RECORDS }
+    fun showLeaderboard() { currentScreen = GameScreen.LEADERBOARD }
     fun showHowToPlay() { currentScreen = GameScreen.HOW_TO_PLAY }
     fun showSettings() { currentScreen = GameScreen.SETTINGS }
     fun showLanguageSelect() { currentScreen = GameScreen.LANGUAGE_SELECT }
@@ -417,6 +418,20 @@ class GameCoordinator {
             playerName = name
         )
         GameRecordStore.save(record)
+
+        // Submit to world leaderboard
+        scope.launch {
+            try {
+                SignalingClient().submitScore(
+                    score = record.score,
+                    survivalTime = record.survivalTime,
+                    playerName = record.playerName,
+                    mode = record.mode,
+                    platform = "android",
+                    deviceId = GameRecordStore.deviceId
+                )
+            } catch (_: Exception) {}
+        }
     }
 
     /** ホストモード時にルームを即座に破棄（runBlockingで確実に完了） */

@@ -57,6 +57,7 @@ fun GameScreen(coordinator: GameCoordinator) {
                     onPlay = { coordinator.startSolo(it) },
                     onOnline = { coordinator.showRoomList() },
                     onRecords = { coordinator.showRecords() },
+                    onLeaderboard = { coordinator.showLeaderboard() },
                     onHowToPlay = { coordinator.showHowToPlay() },
                     onSettings = { coordinator.showSettings() },
                     onLanguage = { coordinator.showLanguageSelect() }
@@ -205,6 +206,10 @@ fun GameScreen(coordinator: GameCoordinator) {
 
             GameScreenEnum.RECORDS -> {
                 RecordsScreen(onBack = { coordinator.currentScreen = GameScreenEnum.START })
+            }
+
+            GameScreenEnum.LEADERBOARD -> {
+                LeaderboardScreen(onBack = { coordinator.currentScreen = GameScreenEnum.START })
             }
 
             GameScreenEnum.HOW_TO_PLAY -> {

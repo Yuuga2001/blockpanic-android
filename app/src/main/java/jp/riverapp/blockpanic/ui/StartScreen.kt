@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.HelpOutline
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.Public
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -33,6 +34,7 @@ fun StartScreen(
     onPlay: (String) -> Unit,
     onOnline: () -> Unit,
     onRecords: () -> Unit,
+    onLeaderboard: () -> Unit,
     onHowToPlay: () -> Unit,
     onSettings: () -> Unit,
     onLanguage: () -> Unit
@@ -132,6 +134,8 @@ fun StartScreen(
                 .padding(end = 24.dp)
         ) {
             FlatIconButton(icon = Icons.Filled.EmojiEvents, onClick = onRecords)
+            Spacer(modifier = Modifier.height(16.dp))
+            FlatIconButton(icon = Icons.Filled.Public, onClick = onLeaderboard)
             Spacer(modifier = Modifier.height(16.dp))
             FlatIconButton(icon = Icons.Filled.HelpOutline, onClick = onHowToPlay)
             Spacer(modifier = Modifier.height(16.dp))

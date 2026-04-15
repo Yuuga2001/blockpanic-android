@@ -52,6 +52,17 @@ object GameRecordStore {
         prefs?.edit()?.putString(KEY, gson.toJson(records))?.apply()
     }
 
+    val deviceId: String
+        get() {
+            val key = "blockpanic_device_id"
+            var id = prefs?.getString(key, null)
+            if (id == null) {
+                id = UUID.randomUUID().toString()
+                prefs?.edit()?.putString(key, id)?.apply()
+            }
+            return id
+        }
+
     fun clear() {
         prefs?.edit()?.remove(KEY)?.apply()
     }
