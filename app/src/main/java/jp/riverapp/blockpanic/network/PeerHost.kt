@@ -38,6 +38,23 @@ class PeerHost {
     var onPeerInput: ((String, Boolean, Boolean, Boolean) -> Unit)? = null
     var onPeerGiveUp: ((String) -> Unit)? = null
     var onPeerDisconnect: ((String) -> Unit)? = null
+    /** signaling polling/heartbeat が連続失敗した時に 1 度だけ発火 */
+    var onNetworkLost: ((Throwable) -> Unit)? = null
+
+    /**
+     * 連続失敗カウンタと 1 度限りの発火ガード.
+     * 不変条件: `networkLostNotified` は一度 true になると、この PeerHost インスタンスの
+     * 寿命中は false に戻らない. 再接続は destroy() 後に新インスタンスを生成する前提.
+     */
+    private var pollFailureStreak = 0
+    private var heartbeatFailureStreak = 0
+    private var networkLostNotified = false
+
+    private fun notifyNetworkLost(err: Throwable) {
+        if (networkLostNotified) return
+        networkLostNotified = true
+        onNetworkLost?.invoke(err)
+    }
 
     private data class Peer(
         val id: String,
@@ -74,6 +91,7 @@ class PeerHost {
         if (roomId.isEmpty()) return
         try {
             val signals = signaling.getSignals(roomId)
+            pollFailureStreak = 0
             for (signal in signals) {
                 if (signal.peerId in answeredPeers) continue
                 val offer = signal.offer ?: continue
@@ -90,6 +108,8 @@ class PeerHost {
             }
         } catch (e: Exception) {
             Log.e(TAG, "Polling error: $e")
+            pollFailureStreak++
+            if (pollFailureStreak >= POLL_FAILURE_THRESHOLD) notifyNetworkLost(e)
         }
     }
 
@@ -263,7 +283,13 @@ class PeerHost {
     suspend fun updatePlayerCount() {
         if (roomId.isEmpty()) return
         val count = 1 + getConnectedPeerCount()
-        try { signaling.updateRoom(roomId, count) } catch (_: Exception) {}
+        try {
+            signaling.updateRoom(roomId, count)
+            heartbeatFailureStreak = 0
+        } catch (e: Exception) {
+            heartbeatFailureStreak++
+            if (heartbeatFailureStreak >= HEARTBEAT_FAILURE_THRESHOLD) notifyNetworkLost(e)
+        }
     }
 
     suspend fun destroy() {
@@ -285,5 +311,16 @@ class PeerHost {
         onPeerInput = null
         onPeerGiveUp = null
         onPeerDisconnect = null
+        onNetworkLost = null
+    }
+
+    companion object {
+        /** signaling 通信断の検出閾値. Web版 PeerHost.ts と同値.
+         *  - POLL (2秒間隔) × 5回 = 約10秒の断絶で通知
+         *  - HEARTBEAT (30秒間隔) × 3回 = 約90秒の断絶で通知
+         *    (ルーム TTL 45秒より長く取り、一時的失敗で偽陽性を減らす)
+         */
+        private const val POLL_FAILURE_THRESHOLD = 5
+        private const val HEARTBEAT_FAILURE_THRESHOLD = 3
     }
 }

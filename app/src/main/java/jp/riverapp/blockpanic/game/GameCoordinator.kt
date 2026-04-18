@@ -7,9 +7,12 @@ import jp.riverapp.blockpanic.i18n.L
 import jp.riverapp.blockpanic.model.GameMode
 import jp.riverapp.blockpanic.model.GameRecord
 import jp.riverapp.blockpanic.model.GameRecordStore
+import jp.riverapp.blockpanic.network.AppError
+import jp.riverapp.blockpanic.network.AppErrorKind
 import jp.riverapp.blockpanic.network.PeerClient
 import jp.riverapp.blockpanic.network.PeerHost
 import jp.riverapp.blockpanic.network.SignalingClient
+import jp.riverapp.blockpanic.network.classifyError
 import jp.riverapp.blockpanic.util.Haptics
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,7 +44,10 @@ class GameCoordinator {
     var finalScore: Int = 0
     var playerCount: Int = 0
     var roomElapsed: Int = 0
-    var connectionError: String? = null
+    /** オフライン/ルーム/汎用エラー用の分類済みダイアログ state. null でダイアログ非表示 */
+    private val _appError = MutableStateFlow<AppErrorKind?>(null)
+    val appError: StateFlow<AppErrorKind?> = _appError
+    fun dismissAppError() { _appError.value = null }
     var roomName: String = ""
 
     // Latest state for rendering (read by GameSurfaceView on render thread)
@@ -60,6 +66,8 @@ class GameCoordinator {
     private var lastStateTime: Long = 0
     private var hostTimeoutJob: Job? = null
     private var sessionId: Int = 0
+    /** 直近の PeerHost.destroy Job. 次の createRoom 前に join() して順序保証 */
+    private var pendingDestroyJob: Job? = null
     /// バックグラウンド遷移時の遅延クリーンアップ用
     private var backgroundCleanupJob: Job? = null
 
@@ -165,14 +173,25 @@ class GameCoordinator {
             scope.launch { host.updatePlayerCount() }
         }
 
+        // signaling 連続失敗時: ルームから退出してエラーダイアログで通知 (Web と同じ挙動)
+        val session = sessionId
+        host.onNetworkLost = { err ->
+            if (sessionId == session) {
+                leaveRoomWithError(classifyError(err).kind)
+            }
+        }
+
+        // 直近の destroy があれば完了を待ってから createRoom
         currentScreen = GameScreen.CONNECTING
+        val prevDestroy = pendingDestroyJob
         scope.launch {
+            prevDestroy?.join()
             try {
                 val roomId = host.createRoom(n)
                 roomName = n
                 currentScreen = GameScreen.GAME
             } catch (e: Exception) {
-                connectionError = e.message
+                _appError.value = classifyError(e).kind
                 currentScreen = GameScreen.START
             }
         }
@@ -254,10 +273,10 @@ class GameCoordinator {
             }
         }
 
-        client.onErrorEvent = { message ->
+        client.onErrorEvent = { _ ->
             mainHandler.post {
                 if (sessionId != currentSession) return@post
-                connectionError = message
+                _appError.value = AppErrorKind.HOST_UNAVAILABLE
                 currentScreen = GameScreen.START
             }
         }
@@ -269,16 +288,26 @@ class GameCoordinator {
                 val freshRooms = SignalingClient().listRooms()
                 val now = System.currentTimeMillis() / 1000.0
                 val target = freshRooms.firstOrNull { it.roomId == roomId }
-                if (target == null || (now - target.lastHeartbeat) >= 45) {
-                    connectionError = L("room_expired")
+                if (target == null) {
+                    _appError.value = AppErrorKind.ROOM_NOT_FOUND
+                    currentScreen = GameScreen.START
+                    return@launch
+                }
+                if ((now - target.lastHeartbeat) >= 45) {
+                    _appError.value = AppErrorKind.ROOM_EXPIRED
                     currentScreen = GameScreen.START
                     return@launch
                 }
 
-                client.connect(roomId)
+                try {
+                    client.connect(roomId)
+                } catch (e: Exception) {
+                    // WebRTC 接続失敗 (タイムアウト含む) はホスト応答なしとして扱う
+                    throw AppError(AppErrorKind.HOST_UNAVAILABLE, cause = e)
+                }
                 client.sendJoin(n)
             } catch (e: Exception) {
-                connectionError = e.message
+                _appError.value = classifyError(e).kind
                 currentScreen = GameScreen.START
             }
         }
@@ -388,11 +417,19 @@ class GameCoordinator {
         currentScreen = GameScreen.START
     }
 
+    /**
+     * ホスト: ルームを破棄してスタート画面に戻る.
+     * `sessionId` を増分することで、旧 PeerHost から遅延発火するコールバックを guard で弾く.
+     * 冪等: 既に LOCAL モード (active な P2P セッション無し) なら何もしない.
+     */
     fun leaveRoom() {
+        if (mode == GameMode.LOCAL && peerHost == null && peerClient == null) return
+        sessionId++
         hostTimeoutJob?.cancel()
         hostTimeoutJob = null
         peerHost?.let { host ->
-            scope.launch { host.destroy() }
+            // 次の createRoom が始まる前に destroy 完了を保証するため Job を保持
+            pendingDestroyJob = scope.launch { host.destroy() }
             peerHost = null
         }
         peerClient?.disconnect()
@@ -400,12 +437,21 @@ class GameCoordinator {
         clientPlayerId = ""
         clientLastSelfId = ""
         roomName = ""
-        connectionError = null
+        _appError.value = null
 
         engine.restart()
         setupEngineCallbacks()
         mode = GameMode.LOCAL
         currentScreen = GameScreen.START
+    }
+
+    /**
+     * ルームから退出した後、指定のエラーをダイアログで表示する合成メソッド.
+     * `leaveRoom()` が _appError をクリアする前提に依存せず、順序を気にせず使える.
+     */
+    fun leaveRoomWithError(kind: AppErrorKind) {
+        leaveRoom()
+        _appError.value = kind
     }
 
     private fun returnToStart() {

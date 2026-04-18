@@ -57,6 +57,24 @@ object Strings {
         "mode_single" to "Single", "mode_host" to "Online(Host)", "mode_member" to "Online(Member)",
         "connection_error" to "Connection Error", "ok" to "OK",
         "auto_device" to "System Default",
+        // Errors v2
+        "err_offline_title" to "You're offline",
+        "err_offline_msg" to "Check your internet connection and try again.",
+        "err_timeout_title" to "Connection timeout",
+        "err_timeout_msg" to "The server took too long to respond.",
+        "err_room_not_found_title" to "Room not found",
+        "err_room_not_found_msg" to "This room does not exist or has been closed.",
+        "err_room_expired_title" to "Room expired",
+        "err_room_expired_msg" to "This room is no longer active.",
+        "err_room_full_title" to "Room is full",
+        "err_room_full_msg" to "This room has reached its player limit.",
+        "err_host_unavailable_title" to "Host unavailable",
+        "err_host_unavailable_msg" to "Couldn't reach the host. They may have disconnected.",
+        "err_server_title" to "Server error",
+        "err_server_msg" to "Something went wrong on our side. Please try again later.",
+        "err_generic_title" to "Something went wrong",
+        "err_generic_msg" to "An unexpected error occurred. Please try again.",
+        "close" to "CLOSE",
     )
 
     // MARK: - Japanese
@@ -100,6 +118,24 @@ object Strings {
         "mode_single" to "ソロ", "mode_host" to "オンライン(ホスト)", "mode_member" to "オンライン(参加)",
         "connection_error" to "接続エラー", "ok" to "OK",
         "auto_device" to "端末設定に合わせる",
+        // Errors v2
+        "err_offline_title" to "オフラインです",
+        "err_offline_msg" to "インターネット接続を確認してもう一度お試しください。",
+        "err_timeout_title" to "接続タイムアウト",
+        "err_timeout_msg" to "サーバーからの応答がありませんでした。",
+        "err_room_not_found_title" to "ルームが見つかりません",
+        "err_room_not_found_msg" to "このルームは存在しないか、閉じられています。",
+        "err_room_expired_title" to "ルームの有効期限切れ",
+        "err_room_expired_msg" to "このルームは既に終了しています。",
+        "err_room_full_title" to "ルームが満員です",
+        "err_room_full_msg" to "参加人数の上限に達しています。",
+        "err_host_unavailable_title" to "ホストに接続できません",
+        "err_host_unavailable_msg" to "ホストが切断された可能性があります。",
+        "err_server_title" to "サーバーエラー",
+        "err_server_msg" to "サーバー側で問題が発生しました。しばらくしてからお試しください。",
+        "err_generic_title" to "エラーが発生しました",
+        "err_generic_msg" to "予期しないエラーが発生しました。もう一度お試しください。",
+        "close" to "閉じる",
     )
 
     // MARK: - Chinese Simplified
@@ -134,6 +170,24 @@ object Strings {
         "effect_big" to "变大", "effect_mini" to "缩小", "effect_jump" to "跳跃", "effect_points" to "+200", "effect_slow" to "减速", "effect_speed" to "加速", "effect_blind" to "黑暗", "effect_coin" to "金币狂潮",
         "mode_single" to "单人", "mode_host" to "在线(主机)", "mode_member" to "在线(加入)",
         "connection_error" to "连接错误", "ok" to "确定", "auto_device" to "跟随系统",
+        // Errors v2
+        "err_offline_title" to "您已离线",
+        "err_offline_msg" to "请检查您的网络连接后重试。",
+        "err_timeout_title" to "连接超时",
+        "err_timeout_msg" to "服务器响应超时。",
+        "err_room_not_found_title" to "房间不存在",
+        "err_room_not_found_msg" to "该房间不存在或已关闭。",
+        "err_room_expired_title" to "房间已过期",
+        "err_room_expired_msg" to "该房间已不再活跃。",
+        "err_room_full_title" to "房间已满",
+        "err_room_full_msg" to "该房间已达到玩家上限。",
+        "err_host_unavailable_title" to "无法连接主机",
+        "err_host_unavailable_msg" to "主机可能已断开连接。",
+        "err_server_title" to "服务器错误",
+        "err_server_msg" to "服务器出错,请稍后再试。",
+        "err_generic_title" to "出现错误",
+        "err_generic_msg" to "发生了意外错误。请重试。",
+        "close" to "关闭",
     )
 
     // MARK: - Chinese Traditional
@@ -168,6 +222,24 @@ object Strings {
         "effect_big" to "變大", "effect_mini" to "縮小", "effect_jump" to "跳躍", "effect_points" to "+200", "effect_slow" to "減速", "effect_speed" to "加速", "effect_blind" to "黑暗", "effect_coin" to "金幣狂潮",
         "mode_single" to "單人", "mode_host" to "線上(主機)", "mode_member" to "線上(加入)",
         "connection_error" to "連線錯誤", "ok" to "確定", "auto_device" to "跟隨系統",
+        // Errors v2
+        "err_offline_title" to "您已離線",
+        "err_offline_msg" to "請檢查您的網路連線後重試。",
+        "err_timeout_title" to "連線逾時",
+        "err_timeout_msg" to "伺服器回應超時。",
+        "err_room_not_found_title" to "房間不存在",
+        "err_room_not_found_msg" to "該房間不存在或已關閉。",
+        "err_room_expired_title" to "房間已過期",
+        "err_room_expired_msg" to "該房間已不再活躍。",
+        "err_room_full_title" to "房間已滿",
+        "err_room_full_msg" to "該房間已達到玩家上限。",
+        "err_host_unavailable_title" to "無法連線主機",
+        "err_host_unavailable_msg" to "主機可能已斷線。",
+        "err_server_title" to "伺服器錯誤",
+        "err_server_msg" to "伺服器出錯,請稍後再試。",
+        "err_generic_title" to "發生錯誤",
+        "err_generic_msg" to "發生了意外錯誤。請重試。",
+        "close" to "關閉",
     )
 
     // MARK: - Korean
@@ -202,6 +274,24 @@ object Strings {
         "effect_big" to "거대화", "effect_mini" to "축소", "effect_jump" to "점프", "effect_points" to "+200", "effect_slow" to "감속", "effect_speed" to "가속", "effect_blind" to "어둠", "effect_coin" to "코인 러시",
         "mode_single" to "솔로", "mode_host" to "온라인(호스트)", "mode_member" to "온라인(참가)",
         "connection_error" to "연결 오류", "ok" to "확인", "auto_device" to "기기 설정에 따름",
+        // Errors v2
+        "err_offline_title" to "오프라인 상태",
+        "err_offline_msg" to "인터넷 연결을 확인하고 다시 시도하세요.",
+        "err_timeout_title" to "연결 시간 초과",
+        "err_timeout_msg" to "서버 응답 시간이 초과되었습니다.",
+        "err_room_not_found_title" to "방을 찾을 수 없음",
+        "err_room_not_found_msg" to "이 방은 존재하지 않거나 닫혔습니다.",
+        "err_room_expired_title" to "방 만료됨",
+        "err_room_expired_msg" to "이 방은 더 이상 활성화되지 않습니다.",
+        "err_room_full_title" to "방이 가득 참",
+        "err_room_full_msg" to "이 방은 인원 제한에 도달했습니다.",
+        "err_host_unavailable_title" to "호스트 연결 실패",
+        "err_host_unavailable_msg" to "호스트에 연결할 수 없습니다.",
+        "err_server_title" to "서버 오류",
+        "err_server_msg" to "서버에 문제가 발생했습니다. 잠시 후 다시 시도하세요.",
+        "err_generic_title" to "문제가 발생했습니다",
+        "err_generic_msg" to "예기치 않은 오류가 발생했습니다.",
+        "close" to "닫기",
     )
 
     // MARK: - French
@@ -236,6 +326,24 @@ object Strings {
         "effect_big" to "GÉANT", "effect_mini" to "MINI", "effect_jump" to "SAUT", "effect_points" to "+200", "effect_slow" to "LENT", "effect_speed" to "VITE", "effect_blind" to "AVEUGLE", "effect_coin" to "PLUIE DE PIÈCES",
         "mode_single" to "Solo", "mode_host" to "En ligne(Hôte)", "mode_member" to "En ligne(Invité)",
         "connection_error" to "Erreur de connexion", "ok" to "OK", "auto_device" to "Par défaut du système",
+        // Errors v2
+        "err_offline_title" to "Vous êtes hors ligne",
+        "err_offline_msg" to "Vérifiez votre connexion Internet et réessayez.",
+        "err_timeout_title" to "Délai d'attente dépassé",
+        "err_timeout_msg" to "Le serveur a mis trop de temps à répondre.",
+        "err_room_not_found_title" to "Salon introuvable",
+        "err_room_not_found_msg" to "Ce salon n'existe pas ou a été fermé.",
+        "err_room_expired_title" to "Salon expiré",
+        "err_room_expired_msg" to "Ce salon n'est plus actif.",
+        "err_room_full_title" to "Salon complet",
+        "err_room_full_msg" to "Ce salon a atteint sa limite de joueurs.",
+        "err_host_unavailable_title" to "Hôte indisponible",
+        "err_host_unavailable_msg" to "Impossible de contacter l'hôte.",
+        "err_server_title" to "Erreur serveur",
+        "err_server_msg" to "Un problème est survenu. Réessayez plus tard.",
+        "err_generic_title" to "Une erreur est survenue",
+        "err_generic_msg" to "Erreur inattendue. Veuillez réessayer.",
+        "close" to "FERMER",
     )
 
     // MARK: - German
@@ -270,6 +378,24 @@ object Strings {
         "effect_big" to "GROSS", "effect_mini" to "MINI", "effect_jump" to "SPRUNG", "effect_points" to "+200", "effect_slow" to "LANGSAM", "effect_speed" to "SCHNELL", "effect_blind" to "BLIND", "effect_coin" to "MÜNZREGEN",
         "mode_single" to "Solo", "mode_host" to "Online(Host)", "mode_member" to "Online(Gast)",
         "connection_error" to "Verbindungsfehler", "ok" to "OK", "auto_device" to "Systemeinstellung",
+        // Errors v2
+        "err_offline_title" to "Du bist offline",
+        "err_offline_msg" to "Überprüfe deine Internetverbindung und versuche es erneut.",
+        "err_timeout_title" to "Zeitüberschreitung",
+        "err_timeout_msg" to "Der Server hat zu lange gebraucht zu antworten.",
+        "err_room_not_found_title" to "Raum nicht gefunden",
+        "err_room_not_found_msg" to "Dieser Raum existiert nicht oder wurde geschlossen.",
+        "err_room_expired_title" to "Raum abgelaufen",
+        "err_room_expired_msg" to "Dieser Raum ist nicht mehr aktiv.",
+        "err_room_full_title" to "Raum ist voll",
+        "err_room_full_msg" to "Dieser Raum hat das Spielerlimit erreicht.",
+        "err_host_unavailable_title" to "Host nicht erreichbar",
+        "err_host_unavailable_msg" to "Der Host konnte nicht erreicht werden.",
+        "err_server_title" to "Serverfehler",
+        "err_server_msg" to "Etwas ist schiefgelaufen. Bitte später erneut versuchen.",
+        "err_generic_title" to "Etwas ist schiefgelaufen",
+        "err_generic_msg" to "Ein unerwarteter Fehler ist aufgetreten.",
+        "close" to "SCHLIESSEN",
     )
 
     // MARK: - Spanish
@@ -304,6 +430,24 @@ object Strings {
         "effect_big" to "GIGANTE", "effect_mini" to "MINI", "effect_jump" to "SALTO", "effect_points" to "+200", "effect_slow" to "LENTO", "effect_speed" to "RÁPIDO", "effect_blind" to "CIEGO", "effect_coin" to "LLUVIA DE MONEDAS",
         "mode_single" to "Solo", "mode_host" to "En línea(Host)", "mode_member" to "En línea(Invitado)",
         "connection_error" to "Error de conexión", "ok" to "OK", "auto_device" to "Seguir sistema",
+        // Errors v2
+        "err_offline_title" to "Estás sin conexión",
+        "err_offline_msg" to "Verifica tu conexión a Internet e inténtalo de nuevo.",
+        "err_timeout_title" to "Tiempo de espera agotado",
+        "err_timeout_msg" to "El servidor tardó demasiado en responder.",
+        "err_room_not_found_title" to "Sala no encontrada",
+        "err_room_not_found_msg" to "Esta sala no existe o ha sido cerrada.",
+        "err_room_expired_title" to "Sala expirada",
+        "err_room_expired_msg" to "Esta sala ya no está activa.",
+        "err_room_full_title" to "Sala llena",
+        "err_room_full_msg" to "Esta sala alcanzó el límite de jugadores.",
+        "err_host_unavailable_title" to "Anfitrión no disponible",
+        "err_host_unavailable_msg" to "No se pudo contactar al anfitrión.",
+        "err_server_title" to "Error del servidor",
+        "err_server_msg" to "Algo salió mal. Inténtalo más tarde.",
+        "err_generic_title" to "Algo salió mal",
+        "err_generic_msg" to "Ocurrió un error inesperado.",
+        "close" to "CERRAR",
     )
 
     // MARK: - Portuguese
@@ -338,6 +482,24 @@ object Strings {
         "effect_big" to "GIGANTE", "effect_mini" to "MINI", "effect_jump" to "PULO", "effect_points" to "+200", "effect_slow" to "LENTO", "effect_speed" to "RÁPIDO", "effect_blind" to "CEGO", "effect_coin" to "CHUVA DE MOEDAS",
         "mode_single" to "Solo", "mode_host" to "Online(Host)", "mode_member" to "Online(Convidado)",
         "connection_error" to "Erro de conexão", "ok" to "OK", "auto_device" to "Seguir sistema",
+        // Errors v2
+        "err_offline_title" to "Você está offline",
+        "err_offline_msg" to "Verifique sua conexão com a Internet e tente novamente.",
+        "err_timeout_title" to "Tempo esgotado",
+        "err_timeout_msg" to "O servidor demorou para responder.",
+        "err_room_not_found_title" to "Sala não encontrada",
+        "err_room_not_found_msg" to "Esta sala não existe ou foi fechada.",
+        "err_room_expired_title" to "Sala expirada",
+        "err_room_expired_msg" to "Esta sala não está mais ativa.",
+        "err_room_full_title" to "Sala cheia",
+        "err_room_full_msg" to "Esta sala atingiu o limite de jogadores.",
+        "err_host_unavailable_title" to "Host indisponível",
+        "err_host_unavailable_msg" to "Não foi possível contatar o host.",
+        "err_server_title" to "Erro do servidor",
+        "err_server_msg" to "Algo deu errado. Tente novamente mais tarde.",
+        "err_generic_title" to "Algo deu errado",
+        "err_generic_msg" to "Ocorreu um erro inesperado.",
+        "close" to "FECHAR",
     )
 
     // MARK: - Italian
@@ -372,6 +534,24 @@ object Strings {
         "effect_big" to "GIGANTE", "effect_mini" to "MINI", "effect_jump" to "SALTO", "effect_points" to "+200", "effect_slow" to "LENTO", "effect_speed" to "VELOCE", "effect_blind" to "CIECO", "effect_coin" to "PIOGGIA DI MONETE",
         "mode_single" to "Solo", "mode_host" to "Online(Host)", "mode_member" to "Online(Ospite)",
         "connection_error" to "Errore di connessione", "ok" to "OK", "auto_device" to "Predefinito di sistema",
+        // Errors v2
+        "err_offline_title" to "Sei offline",
+        "err_offline_msg" to "Controlla la tua connessione Internet e riprova.",
+        "err_timeout_title" to "Timeout di connessione",
+        "err_timeout_msg" to "Il server ha impiegato troppo per rispondere.",
+        "err_room_not_found_title" to "Stanza non trovata",
+        "err_room_not_found_msg" to "Questa stanza non esiste o è stata chiusa.",
+        "err_room_expired_title" to "Stanza scaduta",
+        "err_room_expired_msg" to "Questa stanza non è più attiva.",
+        "err_room_full_title" to "Stanza piena",
+        "err_room_full_msg" to "Questa stanza ha raggiunto il limite.",
+        "err_host_unavailable_title" to "Host non disponibile",
+        "err_host_unavailable_msg" to "Impossibile contattare l'host.",
+        "err_server_title" to "Errore del server",
+        "err_server_msg" to "Qualcosa è andato storto. Riprova più tardi.",
+        "err_generic_title" to "Qualcosa è andato storto",
+        "err_generic_msg" to "Si è verificato un errore imprevisto.",
+        "close" to "CHIUDI",
     )
 
     // MARK: - Russian
@@ -406,6 +586,24 @@ object Strings {
         "effect_big" to "БОЛЬШ", "effect_mini" to "МАЛ", "effect_jump" to "ПРЫЖОК", "effect_points" to "+200", "effect_slow" to "МЕДЛ", "effect_speed" to "БЫСТР", "effect_blind" to "СЛЕП", "effect_coin" to "МОНЕТНЫЙ ДОЖДЬ",
         "mode_single" to "Соло", "mode_host" to "Онлайн(Хост)", "mode_member" to "Онлайн(Гость)",
         "connection_error" to "Ошибка подключения", "ok" to "ОК", "auto_device" to "По умолчанию системы",
+        // Errors v2
+        "err_offline_title" to "Вы не в сети",
+        "err_offline_msg" to "Проверьте подключение к Интернету и повторите попытку.",
+        "err_timeout_title" to "Время ожидания истекло",
+        "err_timeout_msg" to "Сервер не отвечает.",
+        "err_room_not_found_title" to "Комната не найдена",
+        "err_room_not_found_msg" to "Эта комната не существует или была закрыта.",
+        "err_room_expired_title" to "Срок комнаты истёк",
+        "err_room_expired_msg" to "Эта комната больше не активна.",
+        "err_room_full_title" to "Комната заполнена",
+        "err_room_full_msg" to "В этой комнате достигнут лимит игроков.",
+        "err_host_unavailable_title" to "Хост недоступен",
+        "err_host_unavailable_msg" to "Не удалось связаться с хостом.",
+        "err_server_title" to "Ошибка сервера",
+        "err_server_msg" to "Что-то пошло не так. Попробуйте позже.",
+        "err_generic_title" to "Что-то пошло не так",
+        "err_generic_msg" to "Произошла непредвиденная ошибка.",
+        "close" to "ЗАКРЫТЬ",
     )
 
     // MARK: - Thai
@@ -440,6 +638,24 @@ object Strings {
         "effect_big" to "ใหญ่", "effect_mini" to "เล็ก", "effect_jump" to "กระโดด", "effect_points" to "+200", "effect_slow" to "ช้า", "effect_speed" to "เร็ว", "effect_blind" to "มืด", "effect_coin" to "ฝนเหรียญ",
         "mode_single" to "เดี่ยว", "mode_host" to "ออนไลน์(โฮสต์)", "mode_member" to "ออนไลน์(สมาชิก)",
         "connection_error" to "ข้อผิดพลาดการเชื่อมต่อ", "ok" to "ตกลง", "auto_device" to "ตามการตั้งค่าเครื่อง",
+        // Errors v2
+        "err_offline_title" to "คุณออฟไลน์อยู่",
+        "err_offline_msg" to "ตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองอีกครั้ง",
+        "err_timeout_title" to "หมดเวลาการเชื่อมต่อ",
+        "err_timeout_msg" to "เซิร์ฟเวอร์ตอบกลับช้าเกินไป",
+        "err_room_not_found_title" to "ไม่พบห้อง",
+        "err_room_not_found_msg" to "ห้องนี้ไม่มีอยู่หรือถูกปิดแล้ว",
+        "err_room_expired_title" to "ห้องหมดอายุ",
+        "err_room_expired_msg" to "ห้องนี้ไม่ได้ใช้งานแล้ว",
+        "err_room_full_title" to "ห้องเต็ม",
+        "err_room_full_msg" to "ห้องนี้ถึงจำนวนผู้เล่นสูงสุดแล้ว",
+        "err_host_unavailable_title" to "ติดต่อโฮสต์ไม่ได้",
+        "err_host_unavailable_msg" to "ไม่สามารถเชื่อมต่อกับโฮสต์",
+        "err_server_title" to "เซิร์ฟเวอร์ผิดพลาด",
+        "err_server_msg" to "เกิดข้อผิดพลาด กรุณาลองใหม่ภายหลัง",
+        "err_generic_title" to "เกิดข้อผิดพลาด",
+        "err_generic_msg" to "เกิดข้อผิดพลาดที่ไม่คาดคิด",
+        "close" to "ปิด",
     )
 
     // MARK: - Vietnamese
@@ -474,6 +690,24 @@ object Strings {
         "effect_big" to "TO", "effect_mini" to "NHO", "effect_jump" to "NHAY", "effect_points" to "+200", "effect_slow" to "CHAM", "effect_speed" to "NHANH", "effect_blind" to "MU", "effect_coin" to "MUA XU",
         "mode_single" to "Don", "mode_host" to "Truc tuyen(Host)", "mode_member" to "Truc tuyen(Khach)",
         "connection_error" to "Loi ket noi", "ok" to "OK", "auto_device" to "Theo he thong",
+        // Errors v2
+        "err_offline_title" to "Ban dang offline",
+        "err_offline_msg" to "Kiem tra ket noi internet va thu lai.",
+        "err_timeout_title" to "Het thoi gian cho",
+        "err_timeout_msg" to "May chu phan hoi qua lau.",
+        "err_room_not_found_title" to "Khong tim thay phong",
+        "err_room_not_found_msg" to "Phong nay khong ton tai hoac da dong.",
+        "err_room_expired_title" to "Phong het han",
+        "err_room_expired_msg" to "Phong nay khong con hoat dong.",
+        "err_room_full_title" to "Phong da day",
+        "err_room_full_msg" to "Phong da dat gioi han nguoi choi.",
+        "err_host_unavailable_title" to "Host khong kha dung",
+        "err_host_unavailable_msg" to "Khong the lien he host.",
+        "err_server_title" to "Loi may chu",
+        "err_server_msg" to "Da xay ra loi. Vui long thu lai sau.",
+        "err_generic_title" to "Da xay ra loi",
+        "err_generic_msg" to "Loi khong mong doi da xay ra.",
+        "close" to "DONG",
     )
 
     // MARK: - Indonesian
@@ -508,6 +742,24 @@ object Strings {
         "effect_big" to "BESAR", "effect_mini" to "KECIL", "effect_jump" to "LOMPAT", "effect_points" to "+200", "effect_slow" to "LAMBAT", "effect_speed" to "CEPAT", "effect_blind" to "BUTA", "effect_coin" to "HUJAN KOIN",
         "mode_single" to "Solo", "mode_host" to "Online(Host)", "mode_member" to "Online(Tamu)",
         "connection_error" to "Kesalahan koneksi", "ok" to "OK", "auto_device" to "Ikuti sistem",
+        // Errors v2
+        "err_offline_title" to "Anda offline",
+        "err_offline_msg" to "Periksa koneksi internet dan coba lagi.",
+        "err_timeout_title" to "Waktu koneksi habis",
+        "err_timeout_msg" to "Server terlalu lama merespons.",
+        "err_room_not_found_title" to "Ruang tidak ditemukan",
+        "err_room_not_found_msg" to "Ruang ini tidak ada atau telah ditutup.",
+        "err_room_expired_title" to "Ruang kedaluwarsa",
+        "err_room_expired_msg" to "Ruang ini tidak lagi aktif.",
+        "err_room_full_title" to "Ruang penuh",
+        "err_room_full_msg" to "Ruang ini telah mencapai batas pemain.",
+        "err_host_unavailable_title" to "Host tidak tersedia",
+        "err_host_unavailable_msg" to "Tidak dapat menghubungi host.",
+        "err_server_title" to "Error server",
+        "err_server_msg" to "Ada masalah. Coba lagi nanti.",
+        "err_generic_title" to "Terjadi kesalahan",
+        "err_generic_msg" to "Terjadi kesalahan tak terduga.",
+        "close" to "TUTUP",
     )
 
     // MARK: - Hindi
@@ -542,5 +794,23 @@ object Strings {
         "effect_big" to "बड़ा", "effect_mini" to "छोटा", "effect_jump" to "छलांग", "effect_points" to "+200", "effect_slow" to "धीमा", "effect_speed" to "तेज़", "effect_blind" to "अंधा", "effect_coin" to "सिक्कों की बारिश",
         "mode_single" to "सिंगल", "mode_host" to "ऑनलाइन(होस्ट)", "mode_member" to "ऑनलाइन(सदस्य)",
         "connection_error" to "कनेक्शन त्रुटि", "ok" to "ठीक है", "auto_device" to "सिस्टम सेटिंग",
+        // Errors v2
+        "err_offline_title" to "आप ऑफ़लाइन हैं",
+        "err_offline_msg" to "अपना इंटरनेट कनेक्शन जाँचें और पुनः प्रयास करें।",
+        "err_timeout_title" to "कनेक्शन टाइमआउट",
+        "err_timeout_msg" to "सर्वर प्रतिक्रिया देने में बहुत समय लगा।",
+        "err_room_not_found_title" to "कमरा नहीं मिला",
+        "err_room_not_found_msg" to "यह कमरा मौजूद नहीं है या बंद कर दिया गया है।",
+        "err_room_expired_title" to "कमरा समाप्त",
+        "err_room_expired_msg" to "यह कमरा अब सक्रिय नहीं है।",
+        "err_room_full_title" to "कमरा भरा हुआ",
+        "err_room_full_msg" to "इस कमरे में खिलाड़ी सीमा पूरी है।",
+        "err_host_unavailable_title" to "होस्ट उपलब्ध नहीं",
+        "err_host_unavailable_msg" to "होस्ट से संपर्क नहीं हो सका।",
+        "err_server_title" to "सर्वर त्रुटि",
+        "err_server_msg" to "कुछ गलत हुआ। बाद में पुनः प्रयास करें।",
+        "err_generic_title" to "कुछ गलत हुआ",
+        "err_generic_msg" to "एक अप्रत्याशित त्रुटि हुई।",
+        "close" to "बंद करें",
     )
 }

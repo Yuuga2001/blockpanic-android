@@ -230,5 +230,11 @@ fun GameScreen(coordinator: GameCoordinator) {
                 LanguageSelectScreen(onBack = { coordinator.currentScreen = GameScreenEnum.SETTINGS })
             }
         }
+
+        // Offline / room / 汎用エラーダイアログ (全画面共通オーバーレイ)
+        val appErr by coordinator.appError.collectAsState()
+        appErr?.let { kind ->
+            ErrorDialog(kind = kind) { coordinator.dismissAppError() }
+        }
     }
 }
