@@ -10,6 +10,7 @@ import jp.riverapp.blockpanic.model.GameRecordStore
 import jp.riverapp.blockpanic.network.PeerClient
 import jp.riverapp.blockpanic.network.PeerHost
 import jp.riverapp.blockpanic.network.SignalingClient
+import jp.riverapp.blockpanic.util.Haptics
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -109,6 +110,8 @@ class GameCoordinator {
                     survivalTime = ((System.currentTimeMillis() - joinedAt) / 1000).toInt()
                 }
                 saveRecord()
+                // Death haptic feedback
+                Haptics.death()
                 // Wait for death animation (900ms) before showing game over view
                 mainHandler.postDelayed({
                     currentScreen = GameScreen.GAME_OVER
@@ -234,6 +237,8 @@ class GameCoordinator {
                     survivalTime = ((System.currentTimeMillis() - joinedAt) / 1000).toInt()
                 }
                 saveRecord()
+                // Death haptic feedback
+                Haptics.death()
                 // Wait for death animation (900ms) before showing game over view
                 mainHandler.postDelayed({
                     if (sessionId != currentSession) return@postDelayed

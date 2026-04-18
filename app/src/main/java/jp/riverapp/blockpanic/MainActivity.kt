@@ -12,6 +12,7 @@ import jp.riverapp.blockpanic.i18n.LocalizationManager
 import jp.riverapp.blockpanic.model.GameRecordStore
 import jp.riverapp.blockpanic.network.WebRTCConfig
 import jp.riverapp.blockpanic.ui.GameScreen
+import jp.riverapp.blockpanic.util.Haptics
 
 class MainActivity : ComponentActivity() {
     private lateinit var coordinator: GameCoordinator
@@ -23,6 +24,7 @@ class MainActivity : ComponentActivity() {
         LocalizationManager.init(this)
         GameRecordStore.init(this)
         WebRTCConfig.initialize(this)
+        Haptics.init(this)
 
         // Create game coordinator
         coordinator = GameCoordinator()
