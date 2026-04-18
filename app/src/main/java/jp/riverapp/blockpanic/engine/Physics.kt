@@ -68,7 +68,10 @@ fun resolvePlayerBlockCollisions(player: ServerPlayer, blocks: List<BlockState>)
             val overlap = getOverlap(pAABB, bAABB) ?: continue
             hadCollision = true
 
-            if (overlap.overlapY <= overlap.overlapX) {
+            // Falling block hitting from above: always resolve vertically regardless of
+            // overlap ratio (prevents jumping players from escaping crush via horizontal push)
+            val fallingBlockFromAbove = block.falling && overlap.pushY == 1.0
+            if (overlap.overlapY <= overlap.overlapX || fallingBlockFromAbove) {
                 val blockAtFeet = block.y >= player.y + pH / 2
                 if (overlap.pushY == -1.0 && (player.vy >= 0 || blockAtFeet)) {
                     // Landing on top of block (falling, or block is at feet level during wall jump)
