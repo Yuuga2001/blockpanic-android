@@ -120,6 +120,41 @@ class GameSurfaceView @JvmOverloads constructor(
         isAntiAlias = true
     }
 
+    // アイテム効果中バッジ用
+    private val effectBadgeBgPaint = Paint().apply {
+        style = Paint.Style.FILL
+        isAntiAlias = true
+    }
+    private val effectBadgeBorderPaint = Paint().apply {
+        style = Paint.Style.STROKE
+        color = Color.argb(102, 255, 255, 255)
+        strokeWidth = 1.5f * resources.displayMetrics.density
+        isAntiAlias = true
+    }
+    private val effectBadgeTextPaint = Paint().apply {
+        color = Color.WHITE
+        textSize = 18f * resources.displayMetrics.density
+        textAlign = Paint.Align.CENTER
+        typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD)
+        isAntiAlias = true
+    }
+    private val effectProgressTrackPaint = Paint().apply {
+        style = Paint.Style.FILL
+        color = Color.argb(102, 0, 0, 0)
+        isAntiAlias = true
+    }
+    private val effectProgressFillPaint = Paint().apply {
+        style = Paint.Style.FILL
+        color = Color.WHITE
+        isAntiAlias = true
+    }
+
+    // 自プレイヤーの HUD バッジ表示状態. 即時系 (points) はクライアント側で 3秒間維持
+    private data class EffectBadgeDisplay(val effect: MysteryEffect, val startMs: Long, val endMs: Long)
+    @Volatile private var selfEffectDisplay: EffectBadgeDisplay? = null
+    /// 最後に検知した自分の (activeEffect, effectEndTime) キー. 二重トリガ防止
+    @Volatile private var lastSeenEffectKey: String = ""
+
     // Tetromino colors: base, light (highlight), dark (shadow)
     private val pieceColors = arrayOf(
         Triple(Color.rgb(0, 240, 240), Color.rgb(94, 255, 255), Color.rgb(0, 153, 153)),    // I cyan
@@ -778,17 +813,110 @@ class GameSurfaceView @JvmOverloads constructor(
         val safeTop = 34f * density  // extra down offset for rounded corners
 
         val selfPlayer = coord.players.find { it.id == coord.effectivePlayerId }
-        if (coord.effectivePlayerId.isNotEmpty() && selfPlayer != null) {
+        val playing = coord.effectivePlayerId.isNotEmpty() && selfPlayer != null
+        val roomBottomY: Float
+        if (playing) {
             val time = coord.survivalTime
             val lineH = 24f * density
             canvas.drawText("${L("hud_time")}: ${time}s", padding, safeTop, hudPaint)
-            canvas.drawText("${L("hud_score")}: ${selfPlayer.score}", padding, safeTop + lineH, hudPaint)
+            canvas.drawText("${L("hud_score")}: ${selfPlayer!!.score}", padding, safeTop + lineH, hudPaint)
             canvas.drawText("${L("hud_players")}: ${coord.playerCount}", padding, safeTop + lineH * 2.2f, hudSmallPaint)
             canvas.drawText("${L("hud_room")}: ${coord.roomElapsed}s", padding, safeTop + lineH * 3f, hudSmallPaint)
+            roomBottomY = safeTop + lineH * 3f
         } else {
             val lineH = 20f * density
             canvas.drawText("${L("hud_players")}: ${coord.playerCount}", padding, safeTop, hudSmallPaint)
             canvas.drawText("${L("hud_room")}: ${coord.roomElapsed}s", padding, safeTop + lineH, hudSmallPaint)
+            roomBottomY = safeTop + lineH
+        }
+
+        // Active effect badge (自分だけ)
+        updateAndDrawEffectBadge(canvas, selfPlayer, topY = roomBottomY + 28f * density, leftX = padding)
+    }
+
+    /// effect badge 状態を更新して描画. 持続系はプログレスバー付き. 即時系(POINTS)はバー無し3秒表示.
+    private fun updateAndDrawEffectBadge(canvas: Canvas, selfPlayer: PlayerState?, topY: Float, leftX: Float) {
+        val nowMs = System.currentTimeMillis()
+
+        // 自分が存在しない/死亡時はバッジ状態を即座にクリア (死亡→再開後の残像を防止)
+        if (selfPlayer == null || !selfPlayer.alive) {
+            selfEffectDisplay = null
+            lastSeenEffectKey = ""
+            return
+        }
+
+        // 検知: 自分の activeEffect が変化したらバッジ表示を開始/更新
+        val effect = selfPlayer.activeEffect
+        val endTime = selfPlayer.effectEndTime
+        if (effect != null && endTime > 0) {
+            val key = "${effect.name}-${endTime.toLong()}"
+            if (key != lastSeenEffectKey) {
+                lastSeenEffectKey = key
+                val isInstant = (effect == MysteryEffect.POINTS)
+                val endMs = if (isInstant) nowMs + 3000L else endTime.toLong()
+                selfEffectDisplay = EffectBadgeDisplay(effect, nowMs, endMs)
+            }
+        }
+
+        val d = selfEffectDisplay ?: return
+        if (nowMs >= d.endMs) {
+            selfEffectDisplay = null
+            return
+        }
+
+        val density = resources.displayMetrics.density
+        val label = when (d.effect) {
+            MysteryEffect.POINTS    -> L("effect_points")
+            MysteryEffect.COIN      -> L("effect_coin")
+            MysteryEffect.SHRINK    -> L("effect_mini")
+            MysteryEffect.GROW      -> L("effect_big")
+            MysteryEffect.SUPERJUMP -> L("effect_jump")
+            MysteryEffect.SPEED     -> L("effect_speed")
+            MysteryEffect.SLOW      -> L("effect_slow")
+            MysteryEffect.BLIND     -> L("effect_blind")
+        }
+        val bg = when (d.effect) {
+            MysteryEffect.POINTS    -> Color.rgb(255, 204, 51)
+            MysteryEffect.COIN      -> Color.rgb(255, 165, 0)
+            MysteryEffect.SHRINK    -> Color.rgb(68, 187, 255)
+            MysteryEffect.GROW      -> Color.rgb(255, 85, 119)
+            MysteryEffect.SUPERJUMP -> Color.rgb(102, 221, 102)
+            MysteryEffect.SPEED     -> Color.rgb(255, 119, 51)
+            MysteryEffect.SLOW      -> Color.rgb(136, 136, 255)
+            MysteryEffect.BLIND     -> Color.rgb(68, 68, 68)
+        }
+
+        // サイズ計算
+        val padX = 16f * density
+        val textW = effectBadgeTextPaint.measureText(label)
+        val bw = textW + padX * 2
+        val bh = 36f * density
+        val br = 8f * density
+        val bx = leftX
+        val by = topY
+        val rect = RectF(bx, by, bx + bw, by + bh)
+
+        // 背景
+        effectBadgeBgPaint.color = bg
+        canvas.drawRoundRect(rect, br, br, effectBadgeBgPaint)
+        canvas.drawRoundRect(rect, br, br, effectBadgeBorderPaint)
+
+        // ラベル (baseline = 中央少し下)
+        val metrics = effectBadgeTextPaint.fontMetrics
+        val textCy = by + bh / 2 - (metrics.ascent + metrics.descent) / 2
+        canvas.drawText(label, bx + bw / 2, textCy, effectBadgeTextPaint)
+
+        // プログレスバー (持続系のみ)
+        val isInstant = (d.effect == MysteryEffect.POINTS)
+        val total = (d.endMs - d.startMs).toFloat()
+        if (!isInstant && total > 0) {
+            val progress = ((d.endMs - nowMs).toFloat() / total).coerceIn(0f, 1f)
+            val pbx = bx + 4f * density
+            val pby = by + bh + 4f * density
+            val pbw = bw - 8f * density
+            val pbh = 4f * density
+            canvas.drawRect(pbx, pby, pbx + pbw, pby + pbh, effectProgressTrackPaint)
+            canvas.drawRect(pbx, pby, pbx + pbw * progress, pby + pbh, effectProgressFillPaint)
         }
     }
 }

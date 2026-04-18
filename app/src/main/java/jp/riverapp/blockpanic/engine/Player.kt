@@ -24,6 +24,8 @@ class ServerPlayer(
     var speedMultiplier: Double = 1.0
     var activeEffect: MysteryEffect? = null
     var effectEndTime: Double = 0.0
+    /** COIN RUSH 効果中、次にコインを落とす時刻 (ms). 0 は待機中でない */
+    var coinRushNextSpawn: Double = 0.0
 }
 
 fun createPlayer(id: String, name: String, type: PlayerType, spawnX: Double, spawnY: Double): ServerPlayer {

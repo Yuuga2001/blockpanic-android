@@ -38,6 +38,8 @@ class LocalGameEngine {
 
     /** peerId -> playerId mapping (remote player management) */
     private val peerPlayerMap = mutableMapOf<String, String>()
+    /** 死亡通知を発火済みの playerId. 毎tickでの重複発火を防止し、死亡演出後にプレイヤーを削除する */
+    private val remoteDeathFired = mutableSetOf<String>()
 
     private val tickRunnable = object : Runnable {
         override fun run() {
@@ -70,6 +72,7 @@ class LocalGameEngine {
         gameState = GameState()
         playerId = ""
         peerPlayerMap.clear()
+        remoteDeathFired.clear()
         start()
     }
 
@@ -162,12 +165,22 @@ class LocalGameEngine {
             }
         }
 
-        // Check if remote players died
-        for ((peerId, pid) in peerPlayerMap) {
-            val p = gameState.getPlayer(pid)
-            if (p != null && !p.alive) {
-                onRemotePlayerDied?.invoke(peerId, p.score)
-            }
+        // Check if remote players died (一度だけ発火. その後 1秒で削除して死亡演出と重複発火を両立)
+        for ((peerId, pid) in peerPlayerMap.toList()) {
+            val p = gameState.getPlayer(pid) ?: continue
+            if (p.alive) continue
+            if (remoteDeathFired.contains(pid)) continue
+            remoteDeathFired.add(pid)
+            val score = p.score
+            onRemotePlayerDied?.invoke(peerId, score)
+            val deadPid = pid
+            handler?.postDelayed({
+                gameState.removePlayer(deadPid)
+                remoteDeathFired.remove(deadPid)
+                // peerPlayerMap が古い pid を指していれば解除 (rejoin で更新されていれば触らない)
+                val staleKeys = peerPlayerMap.entries.filter { it.value == deadPid }.map { it.key }
+                for (k in staleKeys) peerPlayerMap.remove(k)
+            }, 1000)
         }
 
         // Broadcast at 20Hz

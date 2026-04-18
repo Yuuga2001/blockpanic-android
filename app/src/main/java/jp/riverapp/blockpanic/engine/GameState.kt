@@ -163,6 +163,9 @@ class GameState {
         // === Mystery item system ===
         updateMysteryItems(dtMs)
 
+        // === COIN RUSH spawning (2秒ごとにコイン投下, effectEndTime まで) ===
+        updateCoinRush()
+
         // === Effect expiry ===
         updateEffects()
 
@@ -185,6 +188,7 @@ class GameState {
                     player.speedMultiplier = 1.0
                     player.activeEffect = null
                     player.effectEndTime = 0.0
+                    player.coinRushNextSpawn = 0.0
                 }
             }
         }
@@ -447,6 +451,7 @@ class GameState {
         setHeightMultiplier(player, 1.0)
         player.jumpMultiplier = 1.0
         player.speedMultiplier = 1.0
+        player.coinRushNextSpawn = 0.0
         player.activeEffect = effect
 
         when (effect) {
@@ -481,12 +486,9 @@ class GameState {
                 player.effectEndTime = now + C.mysteryEffectDuration
             }
             MysteryEffect.COIN -> {
-                // Spawn 3 coins at random positions (instant, everyone can collect)
-                for (i in 0 until 3) {
-                    spawnCoin(now + i)
-                }
-                player.effectEndTime = now + 100
-                player.activeEffect = MysteryEffect.COIN
+                // COIN RUSH: 10秒間、2秒ごとにランダム位置へコインを落下 (合計5個)
+                player.effectEndTime = now + C.mysteryEffectDuration
+                player.coinRushNextSpawn = now + 2000
             }
         }
     }
@@ -504,6 +506,17 @@ class GameState {
         // Clamp: don't let feet go below floor
         if (player.y + newH > C.gameHeight) {
             player.y = C.gameHeight - newH
+        }
+    }
+
+    private fun updateCoinRush() {
+        val now = System.currentTimeMillis().toDouble()
+        for (player in players.values.toList()) {
+            if (player.activeEffect != MysteryEffect.COIN || player.coinRushNextSpawn <= 0) continue
+            while (now >= player.coinRushNextSpawn && player.coinRushNextSpawn <= player.effectEndTime) {
+                spawnCoin(player.coinRushNextSpawn)
+                player.coinRushNextSpawn += 2000.0
+            }
         }
     }
 

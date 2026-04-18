@@ -103,18 +103,18 @@ fun GameScreen(coordinator: GameCoordinator) {
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    // RETRY button
+                    // RETRY button (BLIND 効果中でも視認できるよう暗背景+高コントラスト)
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
                             .clip(RoundedCornerShape(8.dp))
-                            .background(Color.White.copy(alpha = 0.08f))
+                            .background(Color.Black.copy(alpha = 0.45f))
                             .clickable { coordinator.giveUp() }
                             .padding(horizontal = 16.dp, vertical = 6.dp)
                     ) {
                         Text(
                             text = L("retry"),
-                            color = Color.White.copy(alpha = 0.4f),
+                            color = Color.White.copy(alpha = 0.7f),
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Bold
                         )
