@@ -109,7 +109,10 @@ class GameCoordinator {
                     survivalTime = ((System.currentTimeMillis() - joinedAt) / 1000).toInt()
                 }
                 saveRecord()
-                currentScreen = GameScreen.GAME_OVER
+                // Wait for death animation (900ms) before showing game over view
+                mainHandler.postDelayed({
+                    currentScreen = GameScreen.GAME_OVER
+                }, 900)
             }
         }
 
@@ -231,7 +234,11 @@ class GameCoordinator {
                     survivalTime = ((System.currentTimeMillis() - joinedAt) / 1000).toInt()
                 }
                 saveRecord()
-                currentScreen = GameScreen.GAME_OVER
+                // Wait for death animation (900ms) before showing game over view
+                mainHandler.postDelayed({
+                    if (sessionId != currentSession) return@postDelayed
+                    currentScreen = GameScreen.GAME_OVER
+                }, 900)
             }
         }
 
