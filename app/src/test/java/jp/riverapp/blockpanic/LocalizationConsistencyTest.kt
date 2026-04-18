@@ -15,11 +15,28 @@ import java.io.File
  */
 class LocalizationConsistencyTest {
 
+    /**
+     * res ディレクトリを堅牢に解決する.
+     * - Gradle / Android Studio では CWD は app module dir (= app/) なので `src/main/res`
+     * - ルートから実行された場合でも `app/src/main/res` で fallback
+     * - CI 等で完全な別パスから実行されても `APP_RES_DIR` 環境変数でオーバーライド可能
+     */
     private val resDir: File by lazy {
-        // unit test の作業ディレクトリは app/ なので直接参照
-        File("src/main/res").absoluteFile.also {
-            assertTrue("res dir not found: $it", it.isDirectory)
+        System.getenv("APP_RES_DIR")?.let { override ->
+            return@lazy File(override).absoluteFile.also {
+                assertTrue("APP_RES_DIR points to non-directory: $it", it.isDirectory)
+            }
         }
+        val cwd = File(System.getProperty("user.dir") ?: ".")
+        val candidates = listOf(
+            File(cwd, "src/main/res"),
+            File(cwd, "app/src/main/res"),
+        )
+        candidates.firstOrNull { it.isDirectory }?.absoluteFile
+            ?: error(
+                "res dir not found. Searched from CWD=${cwd.absolutePath}. " +
+                "Set APP_RES_DIR env var if running from an unusual location."
+            )
     }
 
     @Test
