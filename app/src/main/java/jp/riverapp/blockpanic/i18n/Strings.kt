@@ -96,7 +96,7 @@ object Strings {
         "delete" to "削除", "cancel" to "キャンセル",
         "version" to "バージョン",
         "language" to "言語",
-        "effect_big" to "BIG", "effect_mini" to "MINI", "effect_jump" to "JUMP", "effect_points" to "+200", "effect_slow" to "低速", "effect_speed" to "加速", "effect_blind" to "暗闇", "effect_coin" to "コイン",
+        "effect_big" to "巨大化", "effect_mini" to "縮小", "effect_jump" to "ジャンプ", "effect_points" to "+200", "effect_slow" to "低速", "effect_speed" to "加速", "effect_blind" to "暗闇", "effect_coin" to "コイン",
         "mode_single" to "ソロ", "mode_host" to "オンライン(ホスト)", "mode_member" to "オンライン(参加)",
         "connection_error" to "接続エラー", "ok" to "OK",
         "auto_device" to "端末設定に合わせる",
@@ -131,7 +131,7 @@ object Strings {
         "data" to "数据", "delete_data" to "删除本地数据",
         "delete_confirm_title" to "删除数据", "delete_confirm_msg" to "所有游戏记录将被永久删除，此操作无法撤销。",
         "delete" to "删除", "cancel" to "取消", "version" to "版本", "language" to "语言",
-        "effect_big" to "BIG", "effect_mini" to "MINI", "effect_jump" to "JUMP", "effect_points" to "+200", "effect_slow" to "减速", "effect_speed" to "加速", "effect_blind" to "黑暗", "effect_coin" to "金币",
+        "effect_big" to "变大", "effect_mini" to "缩小", "effect_jump" to "跳跃", "effect_points" to "+200", "effect_slow" to "减速", "effect_speed" to "加速", "effect_blind" to "黑暗", "effect_coin" to "金币",
         "mode_single" to "单人", "mode_host" to "在线(主机)", "mode_member" to "在线(加入)",
         "connection_error" to "连接错误", "ok" to "确定", "auto_device" to "跟随系统",
     )
@@ -165,7 +165,7 @@ object Strings {
         "data" to "資料", "delete_data" to "刪除本地資料",
         "delete_confirm_title" to "刪除資料", "delete_confirm_msg" to "所有遊戲紀錄將被永久刪除，此操作無法撤銷。",
         "delete" to "刪除", "cancel" to "取消", "version" to "版本", "language" to "語言",
-        "effect_big" to "BIG", "effect_mini" to "MINI", "effect_jump" to "JUMP", "effect_points" to "+200", "effect_slow" to "減速", "effect_speed" to "加速", "effect_blind" to "黑暗", "effect_coin" to "金幣",
+        "effect_big" to "變大", "effect_mini" to "縮小", "effect_jump" to "跳躍", "effect_points" to "+200", "effect_slow" to "減速", "effect_speed" to "加速", "effect_blind" to "黑暗", "effect_coin" to "金幣",
         "mode_single" to "單人", "mode_host" to "線上(主機)", "mode_member" to "線上(加入)",
         "connection_error" to "連線錯誤", "ok" to "確定", "auto_device" to "跟隨系統",
     )
@@ -199,7 +199,7 @@ object Strings {
         "data" to "데이터", "delete_data" to "로컬 데이터 삭제",
         "delete_confirm_title" to "데이터 삭제", "delete_confirm_msg" to "모든 플레이 기록이 영구 삭제됩니다. 이 작업은 취소할 수 없습니다.",
         "delete" to "삭제", "cancel" to "취소", "version" to "버전", "language" to "언어",
-        "effect_big" to "BIG", "effect_mini" to "MINI", "effect_jump" to "JUMP", "effect_points" to "+200", "effect_slow" to "감속", "effect_speed" to "가속", "effect_blind" to "어둠", "effect_coin" to "코인",
+        "effect_big" to "거대화", "effect_mini" to "축소", "effect_jump" to "점프", "effect_points" to "+200", "effect_slow" to "감속", "effect_speed" to "가속", "effect_blind" to "어둠", "effect_coin" to "코인",
         "mode_single" to "솔로", "mode_host" to "온라인(호스트)", "mode_member" to "온라인(참가)",
         "connection_error" to "연결 오류", "ok" to "확인", "auto_device" to "기기 설정에 따름",
     )
@@ -233,7 +233,7 @@ object Strings {
         "data" to "DONNÉES", "delete_data" to "Supprimer les données",
         "delete_confirm_title" to "Supprimer", "delete_confirm_msg" to "Tous les records seront supprimés définitivement.",
         "delete" to "Supprimer", "cancel" to "Annuler", "version" to "Version", "language" to "LANGUE",
-        "effect_big" to "BIG", "effect_mini" to "MINI", "effect_jump" to "JUMP", "effect_points" to "+200", "effect_slow" to "LENT", "effect_speed" to "VITE", "effect_blind" to "AVEUGLE", "effect_coin" to "PIÈCES",
+        "effect_big" to "GÉANT", "effect_mini" to "MINI", "effect_jump" to "SAUT", "effect_points" to "+200", "effect_slow" to "LENT", "effect_speed" to "VITE", "effect_blind" to "AVEUGLE", "effect_coin" to "PIÈCES",
         "mode_single" to "Solo", "mode_host" to "En ligne(Hôte)", "mode_member" to "En ligne(Invité)",
         "connection_error" to "Erreur de connexion", "ok" to "OK", "auto_device" to "Par défaut du système",
     )
@@ -267,7 +267,7 @@ object Strings {
         "data" to "DATEN", "delete_data" to "Lokale Daten löschen",
         "delete_confirm_title" to "Daten löschen", "delete_confirm_msg" to "Alle Spielrekorde werden dauerhaft gelöscht.",
         "delete" to "Löschen", "cancel" to "Abbrechen", "version" to "Version", "language" to "SPRACHE",
-        "effect_big" to "BIG", "effect_mini" to "MINI", "effect_jump" to "JUMP", "effect_points" to "+200", "effect_slow" to "LANGSAM", "effect_speed" to "SCHNELL", "effect_blind" to "BLIND", "effect_coin" to "MÜNZEN",
+        "effect_big" to "GROSS", "effect_mini" to "MINI", "effect_jump" to "SPRUNG", "effect_points" to "+200", "effect_slow" to "LANGSAM", "effect_speed" to "SCHNELL", "effect_blind" to "BLIND", "effect_coin" to "MÜNZEN",
         "mode_single" to "Solo", "mode_host" to "Online(Host)", "mode_member" to "Online(Gast)",
         "connection_error" to "Verbindungsfehler", "ok" to "OK", "auto_device" to "Systemeinstellung",
     )
@@ -301,7 +301,7 @@ object Strings {
         "data" to "DATOS", "delete_data" to "Eliminar datos locales",
         "delete_confirm_title" to "Eliminar datos", "delete_confirm_msg" to "Todos los récords se eliminarán permanentemente.",
         "delete" to "Eliminar", "cancel" to "Cancelar", "version" to "Versión", "language" to "IDIOMA",
-        "effect_big" to "BIG", "effect_mini" to "MINI", "effect_jump" to "JUMP", "effect_points" to "+200", "effect_slow" to "LENTO", "effect_speed" to "RÁPIDO", "effect_blind" to "CIEGO", "effect_coin" to "MONEDAS",
+        "effect_big" to "GIGANTE", "effect_mini" to "MINI", "effect_jump" to "SALTO", "effect_points" to "+200", "effect_slow" to "LENTO", "effect_speed" to "RÁPIDO", "effect_blind" to "CIEGO", "effect_coin" to "MONEDAS",
         "mode_single" to "Solo", "mode_host" to "En línea(Host)", "mode_member" to "En línea(Invitado)",
         "connection_error" to "Error de conexión", "ok" to "OK", "auto_device" to "Seguir sistema",
     )
@@ -335,7 +335,7 @@ object Strings {
         "data" to "DADOS", "delete_data" to "Excluir dados locais",
         "delete_confirm_title" to "Excluir dados", "delete_confirm_msg" to "Todos os recordes serão excluídos permanentemente.",
         "delete" to "Excluir", "cancel" to "Cancelar", "version" to "Versão", "language" to "IDIOMA",
-        "effect_big" to "BIG", "effect_mini" to "MINI", "effect_jump" to "JUMP", "effect_points" to "+200", "effect_slow" to "LENTO", "effect_speed" to "RÁPIDO", "effect_blind" to "CEGO", "effect_coin" to "MOEDAS",
+        "effect_big" to "GIGANTE", "effect_mini" to "MINI", "effect_jump" to "PULO", "effect_points" to "+200", "effect_slow" to "LENTO", "effect_speed" to "RÁPIDO", "effect_blind" to "CEGO", "effect_coin" to "MOEDAS",
         "mode_single" to "Solo", "mode_host" to "Online(Host)", "mode_member" to "Online(Convidado)",
         "connection_error" to "Erro de conexão", "ok" to "OK", "auto_device" to "Seguir sistema",
     )
@@ -369,7 +369,7 @@ object Strings {
         "data" to "DATI", "delete_data" to "Elimina dati locali",
         "delete_confirm_title" to "Elimina dati", "delete_confirm_msg" to "Tutti i record verranno eliminati in modo permanente.",
         "delete" to "Elimina", "cancel" to "Annulla", "version" to "Versione", "language" to "LINGUA",
-        "effect_big" to "BIG", "effect_mini" to "MINI", "effect_jump" to "JUMP", "effect_points" to "+200", "effect_slow" to "LENTO", "effect_speed" to "VELOCE", "effect_blind" to "CIECO", "effect_coin" to "MONETE",
+        "effect_big" to "GIGANTE", "effect_mini" to "MINI", "effect_jump" to "SALTO", "effect_points" to "+200", "effect_slow" to "LENTO", "effect_speed" to "VELOCE", "effect_blind" to "CIECO", "effect_coin" to "MONETE",
         "mode_single" to "Solo", "mode_host" to "Online(Host)", "mode_member" to "Online(Ospite)",
         "connection_error" to "Errore di connessione", "ok" to "OK", "auto_device" to "Predefinito di sistema",
     )
@@ -403,7 +403,7 @@ object Strings {
         "data" to "ДАННЫЕ", "delete_data" to "Удалить данные",
         "delete_confirm_title" to "Удалить данные", "delete_confirm_msg" to "Все рекорды будут удалены безвозвратно.",
         "delete" to "Удалить", "cancel" to "Отмена", "version" to "Версия", "language" to "ЯЗЫК",
-        "effect_big" to "BIG", "effect_mini" to "MINI", "effect_jump" to "JUMP", "effect_points" to "+200", "effect_slow" to "МЕДЛ", "effect_speed" to "БЫСТР", "effect_blind" to "СЛЕП", "effect_coin" to "МОНЕТЫ",
+        "effect_big" to "БОЛЬШ", "effect_mini" to "МАЛ", "effect_jump" to "ПРЫЖОК", "effect_points" to "+200", "effect_slow" to "МЕДЛ", "effect_speed" to "БЫСТР", "effect_blind" to "СЛЕП", "effect_coin" to "МОНЕТЫ",
         "mode_single" to "Соло", "mode_host" to "Онлайн(Хост)", "mode_member" to "Онлайн(Гость)",
         "connection_error" to "Ошибка подключения", "ok" to "ОК", "auto_device" to "По умолчанию системы",
     )
@@ -437,7 +437,7 @@ object Strings {
         "data" to "ข้อมูล", "delete_data" to "ลบข้อมูลในเครื่อง",
         "delete_confirm_title" to "ลบข้อมูล", "delete_confirm_msg" to "สถิติทั้งหมดจะถูกลบถาวร",
         "delete" to "ลบ", "cancel" to "ยกเลิก", "version" to "เวอร์ชัน", "language" to "ภาษา",
-        "effect_big" to "BIG", "effect_mini" to "MINI", "effect_jump" to "JUMP", "effect_points" to "+200", "effect_slow" to "ช้า", "effect_speed" to "เร็ว", "effect_blind" to "มืด", "effect_coin" to "เหรียญ",
+        "effect_big" to "ใหญ่", "effect_mini" to "เล็ก", "effect_jump" to "กระโดด", "effect_points" to "+200", "effect_slow" to "ช้า", "effect_speed" to "เร็ว", "effect_blind" to "มืด", "effect_coin" to "เหรียญ",
         "mode_single" to "เดี่ยว", "mode_host" to "ออนไลน์(โฮสต์)", "mode_member" to "ออนไลน์(สมาชิก)",
         "connection_error" to "ข้อผิดพลาดการเชื่อมต่อ", "ok" to "ตกลง", "auto_device" to "ตามการตั้งค่าเครื่อง",
     )
@@ -471,7 +471,7 @@ object Strings {
         "data" to "DU LIEU", "delete_data" to "Xoa du lieu",
         "delete_confirm_title" to "Xoa du lieu", "delete_confirm_msg" to "Tat ca ky luc se bi xoa vinh vien.",
         "delete" to "Xoa", "cancel" to "Huy", "version" to "Phien ban", "language" to "NGON NGU",
-        "effect_big" to "BIG", "effect_mini" to "MINI", "effect_jump" to "JUMP", "effect_points" to "+200", "effect_slow" to "CHAM", "effect_speed" to "NHANH", "effect_blind" to "MU", "effect_coin" to "XU",
+        "effect_big" to "TO", "effect_mini" to "NHO", "effect_jump" to "NHAY", "effect_points" to "+200", "effect_slow" to "CHAM", "effect_speed" to "NHANH", "effect_blind" to "MU", "effect_coin" to "XU",
         "mode_single" to "Don", "mode_host" to "Truc tuyen(Host)", "mode_member" to "Truc tuyen(Khach)",
         "connection_error" to "Loi ket noi", "ok" to "OK", "auto_device" to "Theo he thong",
     )
@@ -505,7 +505,7 @@ object Strings {
         "data" to "DATA", "delete_data" to "Hapus data lokal",
         "delete_confirm_title" to "Hapus data", "delete_confirm_msg" to "Semua rekor akan dihapus secara permanen.",
         "delete" to "Hapus", "cancel" to "Batal", "version" to "Versi", "language" to "BAHASA",
-        "effect_big" to "BIG", "effect_mini" to "MINI", "effect_jump" to "JUMP", "effect_points" to "+200", "effect_slow" to "LAMBAT", "effect_speed" to "CEPAT", "effect_blind" to "BUTA", "effect_coin" to "KOIN",
+        "effect_big" to "BESAR", "effect_mini" to "KECIL", "effect_jump" to "LOMPAT", "effect_points" to "+200", "effect_slow" to "LAMBAT", "effect_speed" to "CEPAT", "effect_blind" to "BUTA", "effect_coin" to "KOIN",
         "mode_single" to "Solo", "mode_host" to "Online(Host)", "mode_member" to "Online(Tamu)",
         "connection_error" to "Kesalahan koneksi", "ok" to "OK", "auto_device" to "Ikuti sistem",
     )
@@ -539,7 +539,7 @@ object Strings {
         "data" to "डेटा", "delete_data" to "स्थानीय डेटा हटाएं",
         "delete_confirm_title" to "डेटा हटाएं", "delete_confirm_msg" to "सभी रिकॉर्ड स्थायी रूप से हटा दिए जाएंगे।",
         "delete" to "हटाएं", "cancel" to "रद्द करें", "version" to "संस्करण", "language" to "भाषा",
-        "effect_big" to "BIG", "effect_mini" to "MINI", "effect_jump" to "JUMP", "effect_points" to "+200", "effect_slow" to "धीमा", "effect_speed" to "तेज़", "effect_blind" to "अंधा", "effect_coin" to "सिक्के",
+        "effect_big" to "बड़ा", "effect_mini" to "छोटा", "effect_jump" to "छलांग", "effect_points" to "+200", "effect_slow" to "धीमा", "effect_speed" to "तेज़", "effect_blind" to "अंधा", "effect_coin" to "सिक्के",
         "mode_single" to "सिंगल", "mode_host" to "ऑनलाइन(होस्ट)", "mode_member" to "ऑनलाइन(सदस्य)",
         "connection_error" to "कनेक्शन त्रुटि", "ok" to "ठीक है", "auto_device" to "सिस्टम सेटिंग",
     )
