@@ -114,4 +114,62 @@ class CrushDetectionTest {
         val crushed = resolvePlayerBlockCollisions(p, emptyList())
         assertTrue("Should die when pushed above screen", crushed)
     }
+
+    // -- Airborne player should not be crushed --
+
+    @Test
+    fun testAirbornePlayerNotCrushed() {
+        val p = makePlayer {
+            it.x = 100.0
+            it.y = 100.0
+            it.onGround = false
+        }
+        val block = BlockState(
+            id = "air", x = 95.0, y = 110.0, width = 30.0, height = 30.0,
+            falling = false, pieceType = 0
+        )
+        val crushed = resolvePlayerBlockCollisions(p, listOf(block))
+        assertFalse("Airborne player should not be crushed", crushed)
+    }
+
+    // -- Jump phase-through prevention --
+
+    @Test
+    fun testJumpingUpwardIntoBlockDoesNotPhaseThrough() {
+        val p = makePlayer {
+            it.x = 100.0
+            it.y = 100.0
+            it.vy = -10.0
+            it.onGround = false
+        }
+        // Block covers head area (block.y < player.y + pH/2)
+        val block = BlockState(
+            id = "head", x = 95.0, y = 90.0, width = 30.0, height = 30.0,
+            falling = false, pieceType = 0
+        )
+        resolvePlayerBlockCollisions(p, listOf(block))
+        // Player should NOT be placed on top of block (phase-through prevented)
+        assertTrue("Player should not phase through block while jumping up", p.y >= 90.0)
+    }
+
+    // -- Wall-jump preserves landing on feet-level block --
+
+    @Test
+    fun testWallJumpLandsOnFeetLevelBlock() {
+        val p = makePlayer {
+            it.x = 100.0
+            it.y = C.gameHeight - C.playerHeight - 20  // 20px above floor
+            it.vy = -10.0
+            it.onGround = false
+        }
+        // Block at feet level (block.y >= player.y + pH/2)
+        val block = BlockState(
+            id = "foot", x = 95.0, y = C.gameHeight - 30, width = 30.0, height = 30.0,
+            falling = false, pieceType = 0
+        )
+        resolvePlayerBlockCollisions(p, listOf(block))
+        // Player should land on top of the block (wall-jump scenario)
+        assertTrue("Should land on feet-level block during wall jump",
+            p.y <= C.gameHeight - 30 - C.playerHeight + 1)
+    }
 }

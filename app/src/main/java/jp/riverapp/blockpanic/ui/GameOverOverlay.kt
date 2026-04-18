@@ -47,23 +47,27 @@ fun GameOverOverlay(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // TIME
-            Row(verticalAlignment = Alignment.Bottom) {
+            // TIME (small, secondary)
+            Text(
+                text = "${L("time_label")}: ${survivalTime}s",
+                color = Color.White.copy(alpha = 0.7f),
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            // SCORE (large, primary)
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = "${L("time_label")}: ${survivalTime}s",
-                    color = Color.White,
-                    fontSize = 20.sp,
+                    text = L("score_label"),
+                    color = Color.Gray,
+                    fontSize = 11.sp,
                     fontWeight = FontWeight.Bold
                 )
-            }
-
-            // SCORE
-            Row(verticalAlignment = Alignment.Bottom) {
                 Text(
-                    text = "${L("score_label")}: ${finalScore}pt",
+                    text = "${finalScore} pt",
                     color = Color.White,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 44.sp,
+                    fontWeight = FontWeight.Black
                 )
             }
 
