@@ -119,3 +119,58 @@ Render Thread (SurfaceView)
 - Dictionary-based (no Android resources strings.xml) for consistency with Web/iOS
 - LocalizationManager: device language detection -> SharedPreferences persistence
 - Fallback chain: selected language -> English
+
+## 効果バッジ HUD
+
+[GameSurfaceView.kt](../app/src/main/java/jp/riverapp/blockpanic/rendering/GameSurfaceView.kt)
+の `updateAndDrawEffectBadge` が `drawHUD` から呼ばれ、Room 行の下にバッジを描画。
+
+- 持続系は効果名 + プログレスバー (`effectBadgeTextPaint` / `effectProgressFillPaint`)
+- 即時系 (`POINTS`, `COIN`) はクライアント側で 3秒間表示 (`selfEffectDisplay` を保持)
+- 自プレイヤーが死亡したら `selfEffectDisplay` を即座にクリア
+- 状態は `@Volatile` で game-thread と render-thread の可視性を保証
+
+## エラー処理
+
+[AppError.kt](../app/src/main/java/jp/riverapp/blockpanic/network/AppError.kt)
+で 8 カテゴリに分類 (`OFFLINE` / `TIMEOUT` / `ROOM_NOT_FOUND` / `ROOM_EXPIRED` /
+`ROOM_FULL` / `HOST_UNAVAILABLE` / `SERVER_ERROR` / `GENERIC`)。
+
+`classifyError` は IOException (UnknownHost / ConnectException) / SocketTimeoutException /
+SignalingError / HTTP status から自動分類する。
+
+GameCoordinator の `MutableStateFlow<AppErrorKind?>` が nil でなければ
+[ErrorDialog.kt](../app/src/main/java/jp/riverapp/blockpanic/ui/ErrorDialog.kt)
+を Compose overlay 表示。
+
+### セッション中通信断の検知 (PeerHost)
+
+Web / iOS と同じ閾値 (companion object 定数化):
+- `getSignals` (2秒間隔) 5回連続失敗 = 約10秒で `onNetworkLost`
+- `updateRoom` (30秒間隔) 3回連続失敗 = 約90秒で発火
+
+発火後は `leaveRoomWithError(kind)` でルームから退出。
+
+## リモートプレイヤー死亡ガード (Web と同一パターン)
+
+[LocalGameEngine.kt](../app/src/main/java/jp/riverapp/blockpanic/game/LocalGameEngine.kt)
+の `remoteDeathFired: MutableSet<String>` により、死亡したリモートプレイヤーの
+`onRemotePlayerDied` は 1 度だけ発火する。
+
+- 旧実装ではホストが tick ごとに `sendGameOver` を送信していた
+  → クライアント側でバイブレーション無限発火 / 再参加時に棒人間大量生成 というバグ
+- 現在は 1 度発火後 1秒で GameState からプレイヤーを削除
+
+## ゲームオーバー画面のボタン (モード別)
+
+| モード | PLAY AGAIN | 副ボタン |
+|--------|-----------|---------|
+| ソロ (LOCAL) | `rejoinLocal()` — 盤面維持 | 「タイトルへ戻る」 `backToTitle()` |
+| ホスト (P2P_HOST) | `rejoinAsHost()` | 「ルームを閉じる」 `leaveRoom()` |
+| 参加者 (P2P_CLIENT) | `rejoinAsClient()` | 「退出する」 `exitRoom()` |
+
+## 世界ランキング列幅
+
+[LeaderboardScreen.kt](../app/src/main/java/jp/riverapp/blockpanic/ui/LeaderboardScreen.kt)
+の各列は `horizontalScroll` 内で固定幅。名前欄 144dp / Mode 108dp にしているため
+Online(Member) モード表記でも改行されない。

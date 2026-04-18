@@ -36,11 +36,16 @@ app/src/main/java/jp/riverapp/blockpanic/
 ```
 
 ## Critical Patterns (same as iOS)
-- sessionId: GameCoordinator uses incrementing ID to prevent stale callbacks
+- sessionId: GameCoordinator uses incrementing ID to prevent stale callbacks. `leaveRoom()` も sessionId を増分して古い PeerHost の遅延コールバックを弾く
 - WebRTC: null listeners before close() to prevent crashes
 - Physics: wall-jump graze detection (overlapY < 4px → horizontal resolution)
 - Jump input: 50ms delay between true/false sends
 - PlayerState: optional fields for cross-platform compatibility
+- remoteDeathFired: LocalGameEngine は死亡したリモートプレイヤーの通知を 1 度だけ発火 (重複通知による無限バイブレーションと棒人間大量生成を防止)
+- AppError 8 カテゴリ: OFFLINE / TIMEOUT / ROOM_NOT_FOUND / ROOM_EXPIRED / ROOM_FULL / HOST_UNAVAILABLE / SERVER_ERROR / GENERIC. ErrorDialog で統一表示
+- PeerHost.onNetworkLost: signaling polling 5回 / heartbeat 3回連続失敗で 1 度発火. leaveRoomWithError(kind) でルーム退出 + ダイアログ
+- leaveRoomWithError(kind): leaveRoom + _appError.value 設定の合成メソッド. 順序依存を吸収
+- pendingDestroyJob: leaveRoom の destroy を次の createRoom で join、順序保証
 
 ## Known Fixes
 
