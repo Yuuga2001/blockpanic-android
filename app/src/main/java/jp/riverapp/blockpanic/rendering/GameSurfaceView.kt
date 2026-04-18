@@ -752,20 +752,21 @@ class GameSurfaceView @JvmOverloads constructor(
 
     private fun drawBlindOverlay(canvas: Canvas, cx: Float, cy: Float) {
         val radius = 100f
-        val saved = canvas.saveLayer(null, null)
+        // Save an offscreen layer spanning the whole canvas
+        val saved = canvas.saveLayer(
+            0f, 0f,
+            canvas.width.toFloat(), canvas.height.toFloat(),
+            null
+        )
+        // Fill the LAYER with black
         canvas.drawColor(Color.BLACK)
-        val paint = Paint().apply {
+        // Clear a solid circle from the LAYER only (does not affect underlying game)
+        val clearPaint = Paint().apply {
             xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
             isAntiAlias = true
         }
-        val gradient = RadialGradient(
-            cx, cy, radius,
-            intArrayOf(Color.BLACK, Color.BLACK, Color.TRANSPARENT),
-            floatArrayOf(0f, 0.7f, 1f),
-            Shader.TileMode.CLAMP
-        )
-        paint.shader = gradient
-        canvas.drawCircle(cx, cy, radius, paint)
+        canvas.drawCircle(cx, cy, radius, clearPaint)
+        // Composite layer (black-with-hole) onto the base canvas
         canvas.restoreToCount(saved)
     }
 
