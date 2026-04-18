@@ -103,7 +103,7 @@ fun GameOverOverlay(
                         .clickable { onExitRoom() }
                 ) {
                     Text(
-                        text = L("exit_room"),
+                        text = L(if (mode == GameMode.P2P_HOST) "close_room" else "exit_room"),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
