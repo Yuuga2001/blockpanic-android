@@ -47,7 +47,7 @@ fun LeaderboardScreen(onBack: () -> Unit) {
     ) {
         Column(
             modifier = Modifier
-                .widthIn(max = 560.dp)
+                .widthIn(max = 720.dp)
                 .heightIn(max = 420.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .background(Color(0x33000000))
@@ -106,12 +106,12 @@ fun LeaderboardScreen(onBack: () -> Unit) {
                                 .padding(horizontal = 4.dp, vertical = 4.dp)
                         ) {
                             Text(text = L("rank"), color = Color.Gray, fontSize = 10.sp, modifier = Modifier.width(28.dp))
-                            Text(text = L("name"), color = Color.Gray, fontSize = 10.sp, modifier = Modifier.width(80.dp))
-                            Text(text = L("hud_score"), color = Color.Gray, fontSize = 10.sp, modifier = Modifier.width(56.dp))
+                            Text(text = L("name"), color = Color.Gray, fontSize = 10.sp, modifier = Modifier.width(144.dp))
+                            Text(text = L("hud_score"), color = Color.Gray, fontSize = 10.sp, modifier = Modifier.width(64.dp))
                             Text(text = L("hud_time"), color = Color.Gray, fontSize = 10.sp, modifier = Modifier.width(48.dp))
-                            Text(text = L("mode"), color = Color.Gray, fontSize = 10.sp, modifier = Modifier.width(72.dp))
-                            Text(text = L("platform_label"), color = Color.Gray, fontSize = 10.sp, modifier = Modifier.width(56.dp))
-                            Text(text = L("date"), color = Color.Gray, fontSize = 10.sp, modifier = Modifier.width(90.dp))
+                            Text(text = L("mode"), color = Color.Gray, fontSize = 10.sp, modifier = Modifier.width(108.dp))
+                            Text(text = L("platform_label"), color = Color.Gray, fontSize = 10.sp, modifier = Modifier.width(64.dp))
+                            Text(text = L("date"), color = Color.Gray, fontSize = 10.sp, modifier = Modifier.width(96.dp))
                         }
 
                         LazyColumn {
@@ -123,22 +123,22 @@ fun LeaderboardScreen(onBack: () -> Unit) {
                                         .padding(horizontal = 4.dp, vertical = 3.dp)
                                 ) {
                                     Text(text = "${record.rank}", color = Color(0xCCFFFFFF), fontSize = 11.sp, modifier = Modifier.width(28.dp))
-                                    Row(modifier = Modifier.width(80.dp)) {
+                                    Row(modifier = Modifier.width(144.dp)) {
                                         Text(text = record.playerName, color = Color(0xCCFFFFFF), fontSize = 11.sp)
                                         if (record.isYou) {
                                             Spacer(modifier = Modifier.width(2.dp))
                                             Text(text = L("you"), color = Color(0xFFE94560), fontSize = 9.sp, fontWeight = FontWeight.Bold)
                                         }
                                     }
-                                    Text(text = "${record.score} pt", color = Color(0xCCFFFFFF), fontSize = 11.sp, fontWeight = FontWeight.Bold, modifier = Modifier.width(56.dp))
+                                    Text(text = "${record.score} pt", color = Color(0xCCFFFFFF), fontSize = 11.sp, fontWeight = FontWeight.Bold, modifier = Modifier.width(64.dp))
                                     Text(text = "${record.survivalTime}s", color = Color(0xCCFFFFFF), fontSize = 11.sp, modifier = Modifier.width(48.dp))
-                                    Text(text = record.mode, color = Color(0xCCFFFFFF), fontSize = 11.sp, modifier = Modifier.width(72.dp))
-                                    Text(text = record.platform, color = Color(0xCCFFFFFF), fontSize = 11.sp, modifier = Modifier.width(56.dp))
+                                    Text(text = record.mode, color = Color(0xCCFFFFFF), fontSize = 11.sp, modifier = Modifier.width(108.dp))
+                                    Text(text = record.platform, color = Color(0xCCFFFFFF), fontSize = 11.sp, modifier = Modifier.width(64.dp))
                                     Text(
                                         text = formatLeaderboardDate(record.createdAt),
                                         color = Color(0xCCFFFFFF),
                                         fontSize = 11.sp,
-                                        modifier = Modifier.width(90.dp)
+                                        modifier = Modifier.width(96.dp)
                                     )
                                 }
                             }
