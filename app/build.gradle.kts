@@ -15,6 +15,13 @@ android {
         versionCode = 6
         versionName = "1.2.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // APK サイズ削減: 対応15言語 (+id/in 両方) のみをバンドル.
+        // 依存ライブラリ (androidx, material 等) の他言語リソースを除外.
+        resourceConfigurations += listOf(
+            "en", "ja", "b+zh+Hans", "b+zh+Hant", "ko",
+            "fr", "de", "es", "pt", "it",
+            "ru", "th", "vi", "in", "id", "hi"
+        )
     }
 
     buildTypes {
