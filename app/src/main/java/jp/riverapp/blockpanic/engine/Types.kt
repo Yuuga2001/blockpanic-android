@@ -8,7 +8,11 @@ enum class MysteryEffect(val value: String) {
     @SerializedName("points") POINTS("points"),
     @SerializedName("shrink") SHRINK("shrink"),
     @SerializedName("grow") GROW("grow"),
-    @SerializedName("superjump") SUPERJUMP("superjump");
+    @SerializedName("superjump") SUPERJUMP("superjump"),
+    @SerializedName("slow") SLOW("slow"),
+    @SerializedName("speed") SPEED("speed"),
+    @SerializedName("blind") BLIND("blind"),
+    @SerializedName("coin") COIN("coin");
 
     companion object {
         fun fromValue(value: String): MysteryEffect? = entries.find { it.value == value }

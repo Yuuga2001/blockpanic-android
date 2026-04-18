@@ -21,6 +21,7 @@ class ServerPlayer(
     var diedAt: Double = 0.0
     var heightMultiplier: Double = 1.0
     var jumpMultiplier: Double = 1.0
+    var speedMultiplier: Double = 1.0
     var activeEffect: MysteryEffect? = null
     var effectEndTime: Double = 0.0
 }

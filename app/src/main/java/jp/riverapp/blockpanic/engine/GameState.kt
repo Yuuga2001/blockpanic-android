@@ -182,6 +182,7 @@ class GameState {
                     player.joinedAt = now
                     player.heightMultiplier = 1.0
                     player.jumpMultiplier = 1.0
+                    player.speedMultiplier = 1.0
                     player.activeEffect = null
                     player.effectEndTime = 0.0
                 }
@@ -434,7 +435,10 @@ class GameState {
     }
 
     private fun randomEffect(): MysteryEffect {
-        val effects = MysteryEffect.entries.toTypedArray()
+        val effects = listOf(
+            MysteryEffect.POINTS, MysteryEffect.SHRINK, MysteryEffect.GROW, MysteryEffect.SUPERJUMP,
+            MysteryEffect.SLOW, MysteryEffect.SPEED, MysteryEffect.BLIND, MysteryEffect.COIN
+        )
         return effects[Random.nextInt(effects.size)]
     }
 
@@ -442,6 +446,7 @@ class GameState {
         // Reset previous effect (adjust position to keep feet anchored)
         setHeightMultiplier(player, 1.0)
         player.jumpMultiplier = 1.0
+        player.speedMultiplier = 1.0
         player.activeEffect = effect
 
         when (effect) {
@@ -462,6 +467,26 @@ class GameState {
             MysteryEffect.SUPERJUMP -> {
                 player.jumpMultiplier = 2.0
                 player.effectEndTime = now + C.mysteryEffectDuration
+            }
+            MysteryEffect.SLOW -> {
+                player.speedMultiplier = 0.5
+                player.effectEndTime = now + C.mysteryEffectDuration
+            }
+            MysteryEffect.SPEED -> {
+                player.speedMultiplier = 2.0
+                player.effectEndTime = now + C.mysteryEffectDuration
+            }
+            MysteryEffect.BLIND -> {
+                // Rendering-only effect: renderer masks view when activeEffect == BLIND
+                player.effectEndTime = now + C.mysteryEffectDuration
+            }
+            MysteryEffect.COIN -> {
+                // Spawn 3 coins at random positions (instant, everyone can collect)
+                for (i in 0 until 3) {
+                    spawnCoin(now + i)
+                }
+                player.effectEndTime = now + 100
+                player.activeEffect = MysteryEffect.COIN
             }
         }
     }
@@ -488,6 +513,7 @@ class GameState {
             if (player.effectEndTime > 0 && now >= player.effectEndTime) {
                 setHeightMultiplier(player, 1.0)
                 player.jumpMultiplier = 1.0
+                player.speedMultiplier = 1.0
                 player.activeEffect = null
                 player.effectEndTime = 0.0
             }

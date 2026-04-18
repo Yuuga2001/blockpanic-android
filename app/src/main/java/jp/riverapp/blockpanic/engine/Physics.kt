@@ -5,9 +5,10 @@ package jp.riverapp.blockpanic.engine
 import kotlin.math.abs
 
 fun applyInput(player: ServerPlayer, input: InputState) {
+    val speed = C.moveSpeed * player.speedMultiplier
     player.vx = 0.0
-    if (input.left) player.vx = -C.moveSpeed
-    if (input.right) player.vx = C.moveSpeed
+    if (input.left) player.vx = -speed
+    if (input.right) player.vx = speed
 
     if (input.jump && player.onGround) {
         player.vy = C.jumpPower

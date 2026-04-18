@@ -299,6 +299,20 @@ class GameSurfaceView @JvmOverloads constructor(
         // Item disappearance animations
         drawItemAnims(canvas)
 
+        // Blind overlay: circular mask around local player when BLIND effect is active
+        run {
+            val nowMs = System.currentTimeMillis().toDouble()
+            val self = players.find { it.id == selfId && it.alive }
+            if (self != null && self.activeEffect == MysteryEffect.BLIND && self.effectEndTime > nowMs) {
+                val pH = (C.playerHeight * self.heightMultiplier).toFloat()
+                drawBlindOverlay(
+                    canvas,
+                    self.x.toFloat() + (C.playerWidth.toFloat() / 2f),
+                    self.y.toFloat() + pH / 2f
+                )
+            }
+        }
+
         canvas.restore()
 
         // HUD (drawn in screen space, not game space)
@@ -605,6 +619,10 @@ class GameSurfaceView @JvmOverloads constructor(
                         MysteryEffect.SHRINK -> { text = L("effect_mini"); color = Color.rgb(77, 204, 255) }
                         MysteryEffect.GROW -> { text = L("effect_big"); color = Color.rgb(255, 102, 102) }
                         MysteryEffect.SUPERJUMP -> { text = L("effect_jump"); color = Color.rgb(102, 255, 102) }
+                        MysteryEffect.SLOW -> { text = L("effect_slow"); color = Color.rgb(153, 153, 255) }
+                        MysteryEffect.SPEED -> { text = L("effect_speed"); color = Color.rgb(255, 204, 102) }
+                        MysteryEffect.BLIND -> { text = L("effect_blind"); color = Color.rgb(102, 102, 102) }
+                        MysteryEffect.COIN -> { text = L("effect_coin"); color = Color.rgb(255, 215, 0) }
                     }
                     effectPopups.add(EffectPopup(
                         text = text, color = color,
@@ -728,6 +746,27 @@ class GameSurfaceView @JvmOverloads constructor(
                 canvas.drawCircle(px, py, 3f * pScale, paint)
             }
         }
+    }
+
+    // MARK: - Blind overlay (circular mask around local player)
+
+    private fun drawBlindOverlay(canvas: Canvas, cx: Float, cy: Float) {
+        val radius = 100f
+        val saved = canvas.saveLayer(null, null)
+        canvas.drawColor(Color.BLACK)
+        val paint = Paint().apply {
+            xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+            isAntiAlias = true
+        }
+        val gradient = RadialGradient(
+            cx, cy, radius,
+            intArrayOf(Color.BLACK, Color.BLACK, Color.TRANSPARENT),
+            floatArrayOf(0f, 0.7f, 1f),
+            Shader.TileMode.CLAMP
+        )
+        paint.shader = gradient
+        canvas.drawCircle(cx, cy, radius, paint)
+        canvas.restoreToCount(saved)
     }
 
     // MARK: - HUD rendering (screen space)
