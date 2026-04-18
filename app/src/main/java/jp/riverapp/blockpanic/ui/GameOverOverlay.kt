@@ -22,7 +22,8 @@ fun GameOverOverlay(
     finalScore: Int,
     mode: GameMode,
     onPlayAgain: () -> Unit,
-    onExitRoom: (() -> Unit)?
+    onExitRoom: (() -> Unit)?,
+    onBackToTitle: (() -> Unit)? = null
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -104,6 +105,26 @@ fun GameOverOverlay(
                 ) {
                     Text(
                         text = L(if (mode == GameMode.P2P_HOST) "close_room" else "exit_room"),
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
+            // BACK TO TITLE button (solo mode only)
+            if (mode == GameMode.LOCAL && onBackToTitle != null) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .width(200.dp)
+                        .height(48.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Color(0x33FFFFFF))
+                        .clickable { onBackToTitle() }
+                ) {
+                    Text(
+                        text = L("back_to_title"),
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold

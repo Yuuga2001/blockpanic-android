@@ -133,7 +133,10 @@ fun GameScreen(coordinator: GameCoordinator) {
                         GameMode.P2P_CLIENT -> {{ coordinator.exitRoom() }}
                         GameMode.P2P_HOST -> {{ coordinator.leaveRoom() }}
                         else -> null
-                    }
+                    },
+                    onBackToTitle = if (coordinator.mode == GameMode.LOCAL) {
+                        { coordinator.backToTitle() }
+                    } else null
                 )
             }
 

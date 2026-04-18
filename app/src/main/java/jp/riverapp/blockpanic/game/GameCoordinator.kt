@@ -338,11 +338,24 @@ class GameCoordinator {
         when (mode) {
             GameMode.P2P_HOST -> rejoinAsHost()
             GameMode.P2P_CLIENT -> rejoinAsClient()
-            GameMode.LOCAL -> returnToStart()
+            GameMode.LOCAL -> rejoinLocal()
         }
     }
 
+    /** タイトル画面へ戻る (ソロモードのみ使用) */
+    fun backToTitle() {
+        returnToStart()
+    }
+
     private fun rejoinAsHost() {
+        val name = engine.playerName
+        engine.join(name)
+        joinedAt = System.currentTimeMillis()
+        currentScreen = GameScreen.GAME
+    }
+
+    /** ソロモード: 盤面 (エンジン) を維持して自分だけ再参加 */
+    private fun rejoinLocal() {
         val name = engine.playerName
         engine.join(name)
         joinedAt = System.currentTimeMillis()
